@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SmtProject {
+namespace SmtProject.Behaviour.Utils {
 	public sealed class VelocityView : MonoBehaviour {
 		public Rigidbody2D Rigidbody;
 		public Shapes.Line Line;

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SmtProject {
+namespace SmtProject.Behaviour {
     public class PlayerController : MonoBehaviour {
         public Rigidbody2D Rigidbody2D;
         public float       Speed;

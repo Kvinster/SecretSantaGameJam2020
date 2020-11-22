@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SmtProject {
+namespace SmtProject.Behaviour.Utils {
 	public sealed class CameraController : MonoBehaviour {
 		static readonly Vector3 Offset = new Vector3(0, 0, -10f);
 
