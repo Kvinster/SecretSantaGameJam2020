@@ -21,6 +21,13 @@ namespace SmtProject.Behaviour {
         }
 
         void Update() {
+            if ( Input.GetKeyDown(KeyCode.E) ) {
+                UnityEditor.EditorApplication.isPlaying = false;
+            }
+            if ( Input.GetKeyDown(KeyCode.Q) ) {
+                UnityEditor.EditorApplication.isPaused = true;
+            }
+
             _input = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y")) * InputMult;
             if ( _input != Vector2.zero ) {
                 var angle = -Vector2.SignedAngle(_input, Vector2.right);
