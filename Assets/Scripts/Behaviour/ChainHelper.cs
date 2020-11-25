@@ -10,6 +10,14 @@ namespace SmtProject.Behaviour {
 		static GameObject _headJointPrefab;
 		static GameObject _jointPrefab;
 
+		public static void DestroyChain(Chain chain) {
+			if ( !chain ) {
+				Debug.LogWarning("Chain is null");
+				return;
+			}
+			Object.Destroy(chain.gameObject);
+		}
+
 		public static Chain CreateChain(int length, Rigidbody2D origin) {
 			if ( length <= 0 ) {
 				Debug.LogErrorFormat("Invalid chain length '{0}'", length);
