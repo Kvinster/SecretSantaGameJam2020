@@ -7,15 +7,9 @@ namespace SmtProject.Behaviour.Cortex {
 
 		public GameObject   BombRoot;
 		public VisualEffect Explosion;
-		public Rigidbody2D  Rigidbody;
-		public Vector3      CenterOfMass;
 
 		bool  _exploded;
 		float _timer;
-
-		void Start() {
-			Rigidbody.centerOfMass = CenterOfMass;
-		}
 
 		void Update() {
 			if ( _exploded ) {

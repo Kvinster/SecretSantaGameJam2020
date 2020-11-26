@@ -157,6 +157,7 @@ GameObject:
   - component: {fileID: 3174385409330251747}
   - component: {fileID: 2770605256418458752}
   - component: {fileID: 3453813994491136773}
+  - component: {fileID: 5405156262792672756}
   m_Layer: 10
   m_Name: Bomb
   m_TagString: Untagged
@@ -208,10 +209,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 500
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_AngularDrag: 0
+  m_GravityScale: 4
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -230,9 +231,21 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.1}
-  m_Size: {x: 0.5, y: 1.2}
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.5, y: 1}
   m_Direction: 0
+--- !u!114 &5405156262792672756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7940435193479712907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8755641e57ef4d708d11725750a3214c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8394095006760953672
 GameObject:
   m_ObjectHideFlags: 0

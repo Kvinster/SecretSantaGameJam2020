@@ -78,7 +78,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Rigidbody: {fileID: 2666518570845821374}
   ForceOffset: {x: 0, y: -0.8, z: 0}
-  EngineForce: 12
+  EngineForce: 10
   FireEffect: {fileID: 7348545498283718625}
 --- !u!33 &528220002338769324
 MeshFilter:
