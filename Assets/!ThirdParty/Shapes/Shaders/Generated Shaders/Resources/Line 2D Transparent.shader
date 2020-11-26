@@ -6,12 +6,15 @@ Shader "Shapes/Line 2D Transparent" {
 	}
 	SubShader {
 		Tags {
+			"RenderPipeline" = "UniversalPipeline"
 			"IgnoreProjector" = "True"
 			"Queue" = "Transparent"
 			"RenderType" = "Transparent"
 			"DisableBatching" = "True"
 		}
 		Pass {
+			Name "Pass"
+			Tags { "LightMode" = "UniversalForward" }
 			Cull Off
 			ZTest [_ZTest]
 			Offset [_ZOffsetFactor], [_ZOffsetUnits]
@@ -21,6 +24,25 @@ Shader "Shapes/Line 2D Transparent" {
 				#pragma vertex vert
 				#pragma fragment frag
 				#pragma multi_compile_instancing
+				#pragma prefer_hlslcc gles
+				#pragma exclude_renderers d3d11_9x
+				#pragma target 2.0
+				#pragma multi_compile __ CAP_ROUND CAP_SQUARE
+				#define TRANSPARENT
+				#include "../../Core/Line 2D Core.cginc"
+			ENDHLSL
+		}
+		Pass {
+			Name "DepthOnly"
+			Tags { "LightMode" = "DepthOnly" }
+			Cull Off
+			HLSLPROGRAM
+				#pragma vertex vert
+				#pragma fragment frag
+				#pragma multi_compile_instancing
+				#pragma prefer_hlslcc gles
+				#pragma exclude_renderers d3d11_9x
+				#pragma target 2.0
 				#pragma multi_compile __ CAP_ROUND CAP_SQUARE
 				#define TRANSPARENT
 				#include "../../Core/Line 2D Core.cginc"
@@ -34,6 +56,9 @@ Shader "Shapes/Line 2D Transparent" {
 				#pragma vertex vert
 				#pragma fragment frag
 				#pragma multi_compile_instancing
+				#pragma prefer_hlslcc gles
+				#pragma exclude_renderers d3d11_9x
+				#pragma target 2.0
 				#pragma multi_compile __ CAP_ROUND CAP_SQUARE
 				#define TRANSPARENT
 				#pragma instancing_options assumeuniformscaling nomatrices nolightprobe nolightmap
@@ -49,6 +74,9 @@ Shader "Shapes/Line 2D Transparent" {
 				#pragma vertex vert
 				#pragma fragment frag
 				#pragma multi_compile_instancing
+				#pragma prefer_hlslcc gles
+				#pragma exclude_renderers d3d11_9x
+				#pragma target 2.0
 				#pragma multi_compile __ CAP_ROUND CAP_SQUARE
 				#define TRANSPARENT
 				#pragma instancing_options assumeuniformscaling nomatrices nolightprobe nolightmap
