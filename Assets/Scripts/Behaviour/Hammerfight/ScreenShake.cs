@@ -34,6 +34,8 @@ namespace SmtProject.Behaviour {
 		IEnumerator ShakeCoro(float duration, float magnitude) {
 			_isShaking = true;
 
+			var oldPos = _cameraTransform.localPosition;
+
 			var timer = 0f;
 			while ( timer < duration ) {
 				var pos    = _cameraTransform.localPosition;
@@ -42,6 +44,8 @@ namespace SmtProject.Behaviour {
 				timer                          += Time.deltaTime;
 				yield return null;
 			}
+
+			_cameraTransform.localPosition = oldPos;
 
 			_isShaking = false;
 		}
