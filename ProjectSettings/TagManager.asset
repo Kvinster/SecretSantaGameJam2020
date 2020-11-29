@@ -16,8 +16,8 @@ TagManager:
   - Decor
   - RagdolLimbs
   - TransporterParts
-  - 
-  - 
+  - Player
+  - Dragon
   - 
   - 
   - 
@@ -40,4 +40,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 4049726643
     locked: 0

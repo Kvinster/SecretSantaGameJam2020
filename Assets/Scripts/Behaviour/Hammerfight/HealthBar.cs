@@ -1,25 +1,13 @@
-﻿using UnityEngine;
-
-using Shapes;
+﻿using SmtProject.Behaviour.Utils;
 
 namespace SmtProject.Behaviour {
-	public sealed class HealthBar : MonoBehaviour {
-		public Dummy     Dummy;
-		public Rectangle Background;
-		public Rectangle Foreground;
-		[Space]
-		public Color FullColor;
-		public Color EmptyColor;
+	public sealed class HealthBar : BaseProgressBar {
+		public Dummy Dummy;
 
-		float _maxValue;
-		int   _maxHp;
+		int _maxHp;
 
-		float Progress {
-			set => Foreground.Width = Mathf.Clamp01(value) * _maxValue;
-		}
-
-		void Start() {
-			_maxValue = Background.Width;
+		protected override void Start() {
+			base.Start();
 			_maxHp    = Dummy.MaxHp;
 
 			Dummy.OnCurHpChanged += OnHpChanged;
@@ -38,8 +26,7 @@ namespace SmtProject.Behaviour {
 
 		void UpdateProgress(int hp) {
 			var progress = (float) hp / _maxHp;
-			Progress         = progress;
-			Foreground.Color = Color.Lerp(EmptyColor, FullColor, progress);
+			UpdateProgress(progress);
 		}
 	}
 }
