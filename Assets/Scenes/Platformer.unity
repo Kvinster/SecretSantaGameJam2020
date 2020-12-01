@@ -1362,8 +1362,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 1778933149}
-  LeftBorder: 0.2
-  RightBorder: 0.2
+  LeftBorder: 0.3
+  RightBorder: 0.3
 --- !u!1 &1513416224
 GameObject:
   m_ObjectHideFlags: 0
