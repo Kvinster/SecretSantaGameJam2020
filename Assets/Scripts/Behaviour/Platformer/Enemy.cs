@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+using SmtProject.Behaviour.Utils;
+
 using JetBrains.Annotations;
 
 namespace SmtProject.Behaviour.Platformer {
@@ -15,22 +17,35 @@ namespace SmtProject.Behaviour.Platformer {
 		static readonly int IsDying     = Animator.StringToHash("IsDying");
 		static readonly int WalkDirHash = Animator.StringToHash("WalkDir");
 
-		public Transform Target;
-		public float     WalkSpeed;
+		public float WalkSpeed;
 		[Space]
 		public Animator WalkAnimator;
+		[Space]
+		public Collider2DNotifier InnerDetectNotifier;
+		public Collider2DNotifier OuterDetectNotifier;
 
 		bool    _isWalking;
 		bool    _isDying;
 		WalkDir _curWalkDir;
 
+		Transform _target;
+
+		void Start() {
+			InnerDetectNotifier.OnTriggerEnter += OnInnerDetectObjectEnter;
+			OuterDetectNotifier.OnTriggerExit  += OnOuterDetectObjectExit;
+		}
+
 		void Update() {
 			if ( _isDying ) {
 				return;
 			}
-			var dir = Target.position - transform.position;
-			transform.Translate(dir.normalized * (Time.deltaTime * WalkSpeed));
-			UpdateWalkParams(dir);
+			if ( _target ) {
+				var dir = _target.position - transform.position;
+				transform.Translate(dir.normalized * (Time.deltaTime * WalkSpeed));
+				UpdateWalkParams(dir);
+			} else {
+				_isWalking = false;
+			}
 			UpdateAnimParams();
 		}
 
@@ -66,6 +81,18 @@ namespace SmtProject.Behaviour.Platformer {
 			WalkAnimator.SetBool(IsWalking, _isWalking);
 			WalkAnimator.SetBool(IsDying, _isDying);
 			WalkAnimator.SetInteger(WalkDirHash, (int) _curWalkDir);
+		}
+
+		void OnInnerDetectObjectEnter(Collider2D other) {
+			if ( other.GetComponent<PlayerController>() ) {
+				_target = other.transform;
+			}
+		}
+
+		void OnOuterDetectObjectExit(Collider2D other) {
+			if ( other.transform == _target ) {
+				_target = null;
+			}
 		}
 	}
 }

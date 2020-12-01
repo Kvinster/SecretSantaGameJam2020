@@ -27,8 +27,9 @@ namespace SmtProject.Behaviour.Platformer {
 		public Transform FirePos;
 		[Space]
 		public Collider2DNotifier DetectNotifier;
+		public Collider2DNotifier AttackRangeNotifier;
 
-		bool _canMove = true;
+		bool _canAct = true;
 
 		bool _isFlipped;
 
@@ -46,27 +47,59 @@ namespace SmtProject.Behaviour.Platformer {
 			}
 		}
 
+		Transform CurTarget {
+			get {
+				Transform target = null;
+				if ( _detectedEnemies.Count > 0 ) {
+					var minDistance = float.MaxValue;
+					foreach ( var enemy in _detectedEnemies ) {
+						var dist = Vector2.Distance(enemy.transform.position, transform.position);
+						if ( dist < minDistance ) {
+							minDistance = dist;
+							target      = enemy.transform;
+						}
+					}
+				} else {
+					target = Target;
+				}
+				return target;
+			}
+		}
+
 		void Start() {
-			DetectNotifier.OnTriggerEnter += OnObjectEnter;
-			DetectNotifier.OnTriggerExit  += OnObjectExit;
+			DetectNotifier.OnTriggerEnter      += OnDetectObjectEnter;
+			DetectNotifier.OnTriggerExit       += OnDetectObjectExit;
+			AttackRangeNotifier.OnTriggerEnter += OnAttackObjectEnter;
 		}
 
 		void Update() {
-			if ( _canMove ) {
+			if ( _canAct ) {
 				if ( Input.GetKeyDown(KeyCode.Q) ) {
 					StartAttack();
 				} else {
-					var targetPos = Target.position;
-					var curPos    = transform.position;
-					var distance  = Vector2.Distance(targetPos, curPos);
-					if ( distance > MinDistance ) {
+					Vector3 targetPos;
+					float   minDistance;
+					if ( _detectedEnemies.Count > 0 ) {
+						targetPos   = Vector2.Lerp(Target.position, CurTarget.position, 0.2f);
+						minDistance = 0.1f;
+					} else {
+						targetPos   = CurTarget.position;
+						minDistance = MinDistance;
+					}
+					var curPos   = transform.position;
+					var distance = Vector2.Distance(targetPos, curPos);
+					if ( distance > minDistance ) {
 						var dir   = targetPos - curPos;
 						var shift = dir.normalized * (Time.deltaTime * WalkSpeed);
-						if ( shift.magnitude > (distance - MinDistance) ) {
-							shift = shift.normalized * (distance - MinDistance);
+						if ( shift.magnitude > (distance - minDistance) ) {
+							shift = shift.normalized * Mathf.Max(0f, distance - MinDistance);
 						}
-						transform.Translate(shift);
-						Animator.SetBool(IsWalking, true);
+						if ( shift != Vector3.zero ) {
+							transform.Translate(shift);
+							Animator.SetBool(IsWalking, true);
+						} else {
+							Animator.SetBool(IsWalking, false);
+						}
 					} else {
 						Animator.SetBool(IsWalking, false);
 					}
@@ -75,20 +108,15 @@ namespace SmtProject.Behaviour.Platformer {
 			}
 		}
 
+		public void EndAttack() {
+			Animator.ResetTrigger(Attack);
+			_canAct = true;
+
+			EndBlockingAction();
+		}
+
 		void UpdateOrientation() {
-			var targetPos = Vector3.zero;
-			if ( _detectedEnemies.Count > 0 ) {
-				var minDistance = float.MaxValue;
-				foreach ( var enemy in _detectedEnemies ) {
-					var dist = Vector2.Distance(enemy.transform.position, transform.position);
-					if ( dist < minDistance ) {
-						minDistance = dist;
-						targetPos   = enemy.transform.position;
-					}
-				}
-			} else {
-				targetPos = Target.position;
-			}
+			var targetPos = CurTarget.position;
 			_isFlipped           = (targetPos.x < transform.position.x);
 			SpriteRenderer.flipX = _isFlipped;
 		}
@@ -96,7 +124,7 @@ namespace SmtProject.Behaviour.Platformer {
 		[UsedImplicitly]
 		void EndHurt() {
 			Animator.ResetTrigger(Hurt);
-			_canMove = true;
+			_canAct = true;
 
 			EndBlockingAction();
 		}
@@ -111,19 +139,11 @@ namespace SmtProject.Behaviour.Platformer {
 
 		void StartAttack() {
 			Animator.SetTrigger(Attack);
-			_canMove = false;
+			_canAct = false;
 
 			CreateFire();
 
 			StartBlockingAction();
-		}
-
-		[UsedImplicitly]
-		void EndAttack() {
-			Animator.ResetTrigger(Attack);
-			_canMove = true;
-
-			EndBlockingAction();
 		}
 
 		void CreateFire() {
@@ -133,7 +153,7 @@ namespace SmtProject.Behaviour.Platformer {
 			go.transform.position = transform.TransformPoint(instancePos);
 			go.transform.SetParent(null);
 			var fire = go.GetComponent<DragonFire>();
-			fire.Init(_isFlipped);
+			fire.Init(_isFlipped, this);
 		}
 
 		void StartBlockingAction() {
@@ -144,7 +164,7 @@ namespace SmtProject.Behaviour.Platformer {
 			Animator.SetTrigger(Idle);
 		}
 
-		void OnObjectEnter(Collider2D objectCollider) {
+		void OnDetectObjectEnter(Collider2D objectCollider) {
 			var enemy = objectCollider.GetComponent<Enemy>();
 			if ( enemy ) {
 				_detectedEnemies.Add(enemy);
@@ -152,10 +172,20 @@ namespace SmtProject.Behaviour.Platformer {
 			}
 		}
 
-		void OnObjectExit(Collider2D objectCollider) {
+		void OnDetectObjectExit(Collider2D objectCollider) {
 			if ( _colliderToEnemy.TryGetValue(objectCollider, out var enemy) ) {
 				_detectedEnemies.Remove(enemy);
 				_colliderToEnemy.Remove(objectCollider);
+			}
+		}
+
+		void OnAttackObjectEnter(Collider2D objectCollider) {
+			if ( !_canAct ) {
+				return;
+			}
+			var enemy = objectCollider.GetComponent<Enemy>();
+			if ( enemy ) {
+				StartAttack();
 			}
 		}
 	}

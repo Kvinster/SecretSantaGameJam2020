@@ -62,9 +62,11 @@ namespace SmtProject.Behaviour.Platformer {
 			if ( _canAttack && Input.GetKeyDown(KeyCode.Space) ) {
 				Hit();
 			} else if ( !_isHitting ) {
+
 				var input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 				if ( input != Vector2.zero ) {
-					input = input.normalized * (Time.deltaTime * WalkSpeed);
+
+					input *= (Time.deltaTime * WalkSpeed);
 					transform.Translate(input);
 
 					UpdateWalkParams(input);
@@ -118,7 +120,6 @@ namespace SmtProject.Behaviour.Platformer {
 			if ( _isHurt ) {
 				return;
 			}
-			Destroy(other.gameObject);
 			_isHurt = true;
 
 			_knockbackAnim = transform

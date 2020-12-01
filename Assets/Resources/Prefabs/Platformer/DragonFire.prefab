@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1251705083013362029}
   - component: {fileID: 1251705083013362028}
   - component: {fileID: 9154693948927393207}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: DragonFire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,6 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceb2ba33cc3b4f6b9bbb295a08654d71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Offset: 0
 --- !u!95 &1251705083013362028
 Animator:
   serializedVersion: 3

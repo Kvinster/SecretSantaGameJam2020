@@ -6,12 +6,17 @@ namespace SmtProject.Behaviour.Platformer {
 	public sealed class DragonFire : MonoBehaviour {
 		public SpriteRenderer SpriteRenderer;
 
-		public void Init(bool isFlipped) {
+		Dragon _owner;
+
+		public void Init(bool isFlipped, Dragon owner) {
+			_owner = owner;
+
 			SpriteRenderer.flipX = isFlipped;
 		}
 
 		[UsedImplicitly]
 		void EndPlay() {
+			_owner.EndAttack();
 			Destroy(gameObject);
 		}
 
