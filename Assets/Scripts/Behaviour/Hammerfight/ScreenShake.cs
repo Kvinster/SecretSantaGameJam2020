@@ -2,7 +2,7 @@
 
 using System.Collections;
 
-namespace SmtProject.Behaviour {
+namespace SmtProject.Behaviour.Hammerfight {
 	public sealed class ScreenShake : MonoBehaviour {
 		static ScreenShake _instance;
 

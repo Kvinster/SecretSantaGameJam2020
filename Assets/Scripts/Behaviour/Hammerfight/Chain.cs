@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace SmtProject.Behaviour {
+namespace SmtProject.Behaviour.Hammerfight {
 	public sealed class Chain : MonoBehaviour {
 		public List<ChainJoint> Joints = new List<ChainJoint>();
 

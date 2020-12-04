@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1251705083013362028}
   - component: {fileID: 9154693948927393207}
   m_Layer: 12
-  m_Name: DragonFire
+  m_Name: DragonFire_Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

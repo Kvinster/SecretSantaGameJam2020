@@ -4,6 +4,10 @@ namespace SmtProject.Behaviour.Platformer {
 	[RequireComponent(typeof(Camera))]
 	public sealed class CameraController : MonoBehaviour {
 		public Transform Target;
+		public float     TopBorder;
+		public float     TargetTopBorder;
+		public float     BottomBorder;
+		public float     TargetBottomBorder;
 		public float     LeftBorder  = 0.2f;
 		public float     RightBorder = 0.2f;
 
@@ -31,6 +35,10 @@ namespace SmtProject.Behaviour.Platformer {
 			if ( !Mathf.Approximately(diff, 0f) ) {
 				transform.Translate(new Vector3(diff, 0f));
 			}
+			var curPos = transform.position;
+			transform.position = new Vector3(curPos.x,
+				BottomBorder + (TopBorder - BottomBorder) * (Target.position.y - TargetBottomBorder) /
+				(TargetTopBorder - TargetBottomBorder), curPos.z);
 		}
 	}
 }

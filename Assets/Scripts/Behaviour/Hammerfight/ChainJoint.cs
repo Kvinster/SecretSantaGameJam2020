@@ -2,7 +2,7 @@
 
 using Shapes;
 
-namespace SmtProject.Behaviour {
+namespace SmtProject.Behaviour.Hammerfight {
 	public sealed class ChainJoint : MonoBehaviour {
 		public Line            Line;
 		public Rigidbody2D     Rigidbody;

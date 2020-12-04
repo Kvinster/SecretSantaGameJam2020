@@ -2,7 +2,7 @@
 
 namespace SmtProject.Behaviour.Platformer {
 	public sealed class PlayerHealthBar : BaseProgressBar {
-		public PlayerController Player;
+		public Player Player;
 
 		int _maxHp;
 

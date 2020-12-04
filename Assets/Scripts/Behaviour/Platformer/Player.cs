@@ -1,13 +1,12 @@
-﻿using System;
+﻿using UnityEngine;
+
+using System;
 
 using DG.Tweening;
-
-using UnityEngine;
-
 using JetBrains.Annotations;
 
 namespace SmtProject.Behaviour.Platformer {
-	public sealed class PlayerController : MonoBehaviour {
+	public sealed class Player : MonoBehaviour {
 		enum WalkDir {
 			Up    = 0,
 			Down  = 1,

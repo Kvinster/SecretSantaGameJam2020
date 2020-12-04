@@ -1,6 +1,6 @@
 ﻿using SmtProject.Behaviour.Utils;
 
-namespace SmtProject.Behaviour {
+namespace SmtProject.Behaviour.Hammerfight {
 	public sealed class HealthBar : BaseProgressBar {
 		public Dummy Dummy;
 

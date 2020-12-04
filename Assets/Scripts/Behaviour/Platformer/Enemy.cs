@@ -84,7 +84,7 @@ namespace SmtProject.Behaviour.Platformer {
 		}
 
 		void OnInnerDetectObjectEnter(Collider2D other) {
-			if ( other.GetComponent<PlayerController>() ) {
+			if ( other.GetComponent<Player>() ) {
 				_target = other.transform;
 			}
 		}

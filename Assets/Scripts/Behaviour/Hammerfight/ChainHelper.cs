@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace SmtProject.Behaviour {
+namespace SmtProject.Behaviour.Hammerfight {
 	public static class ChainHelper {
 		const string HeadJointPrefabPath = "Prefabs/HeadJoint";
 		const string JointPrefabPath     = "Prefabs/Joint";

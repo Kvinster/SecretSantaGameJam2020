@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SmtProject.Behaviour {
+namespace SmtProject.Behaviour.Hammerfight {
 	public sealed class ChainCreator : MonoBehaviour {
 		public Rigidbody2D Origin;
 		public int         ChainLength = 5;

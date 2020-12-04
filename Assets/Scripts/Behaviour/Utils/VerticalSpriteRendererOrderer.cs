@@ -11,6 +11,7 @@ namespace SmtProject.Behaviour.Utils {
 			_spriteRenderer = GetComponent<SpriteRenderer>();
 		}
 
+		[ContextMenu("Update")]
 		void Update() {
 			_spriteRenderer.sortingOrder = Mathf.CeilToInt(-(transform.position.y + Offset) * 1000f);
 		}

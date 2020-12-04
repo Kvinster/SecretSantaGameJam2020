@@ -2,7 +2,7 @@
 
 using System;
 
-namespace SmtProject.Behaviour {
+namespace SmtProject.Behaviour.Hammerfight {
 	public sealed class Dummy : MonoBehaviour {
 		public int   MaxHp;
 		public float DamageMult;

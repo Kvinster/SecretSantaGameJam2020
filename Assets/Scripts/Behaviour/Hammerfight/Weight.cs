@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SmtProject.Behaviour {
+namespace SmtProject.Behaviour.Hammerfight {
 	public sealed class Weight : MonoBehaviour {
 		public DistanceJoint2D DistanceJoint;
 		public HingeJoint2D    HingeJoint;
