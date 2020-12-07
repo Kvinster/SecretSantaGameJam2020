@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 
-using System;
+using SmtProject.Behaviour.Platformer.StatBar;
+using SmtProject.Core.Platformer;
+using SmtProject.Utils.ValueAnim;
 
 using DG.Tweening;
 using JetBrains.Annotations;
+using TMPro;
 
 namespace SmtProject.Behaviour.Platformer {
 	public sealed class Player : MonoBehaviour {
@@ -22,10 +25,16 @@ namespace SmtProject.Behaviour.Platformer {
 		public float KnockbackHeight;
 		public float KnockbackDuration;
 		[Space]
-		public int      MaxHp;
-		[Space]
 		public float    WalkSpeed;
 		public Animator WalkAnimator;
+		[Space]
+		public FloatStatBar HealthBar;
+		public FloatStatBar XpBar;
+		public TMP_Text     CurLevelText;
+		[Space]
+		public Spear Spear;
+
+		PlayerController _playerController;
 
 		bool _canAttack = true;
 
@@ -36,22 +45,67 @@ namespace SmtProject.Behaviour.Platformer {
 
 		Tween _knockbackAnim;
 
-		int _curHp;
-		public int CurHp {
-			get => _curHp;
-			private set {
-				if ( _curHp == value ) {
-					return;
-				}
-				_curHp = Mathf.Clamp(value, 0, MaxHp);
-				OnCurHpChanged?.Invoke(_curHp);
+		FloatValueAnim _hpAnim;
+		XpValueAnim    _xpAnim;
+
+		int CurHp    => _playerController.CurHp;
+		int CurXp    => _playerController.CurXp;
+		int CurLevel => _playerController.CurLevel;
+
+		void Start() {
+			_playerController = PlayerController.Instance;
+
+			HealthBar.Init(CurHp, 0, _playerController.MaxHp);
+			XpBar.Init(CurXp, 0, _playerController.NextLevelXp);
+
+			_playerController.CurHp.OnCurValueChanged += OnCurHpChanged;
+			_playerController.MaxHp.OnCurValueChanged += OnMaxHpChanged;
+			_hpAnim                                   =  new FloatValueAnim(CurHp);
+			_hpAnim.OnCurValueChanged                 += OnCurHpAnimValueChanged;
+			OnMaxHpChanged(_playerController.MaxHp);
+
+			_playerController.CurXp.OnCurValueChanged += OnCurXpChanged;
+			_xpAnim                   =  new XpValueAnim(CurXp, CurLevel, 0.2f);
+			_xpAnim.OnCurValueChanged += OnCurXpAnimValueChanged;
+			_xpAnim.OnCurLevelChanged += OnCurXpAnimLevelChanged;
+			_xpAnim.SetNextValue(CurXp);
+			OnCurXpAnimLevelChanged(0);
+
+			Spear.OnEnemyKilled += OnEnemyKilled;
+		}
+
+		void OnCurHpChanged(int curHp) {
+			_hpAnim.SetNextValue(curHp);
+		}
+
+		void OnCurHpAnimValueChanged(float curValue) {
+			HealthBar.UpdateView(curValue);
+		}
+
+		void OnMaxHpChanged(int maxHp) {
+			HealthBar.UpdateView(_hpAnim.CurValue, 0, maxHp);
+		}
+
+		void OnCurXpChanged(int curXp) {
+			if ( _xpAnim.CurLevel < CurLevel ) {
+				_xpAnim.SetNextValue(_playerController.GetNextLevelXp(CurLevel - 1));
+				_xpAnim.SetNextLevel(curXp, CurLevel);
+			} else {
+				_xpAnim.SetNextValue(curXp);
 			}
 		}
 
-		public event Action<int> OnCurHpChanged;
+		void OnCurXpAnimValueChanged(float curValue) {
+			XpBar.UpdateView(curValue);
+		}
 
-		void Start() {
-			CurHp = MaxHp;
+		void OnCurXpAnimLevelChanged(int level) {
+			XpBar.UpdateView(_xpAnim.CurXp, _playerController.GetNextLevelXp(level - 1),  _playerController.GetNextLevelXp(level));
+			CurLevelText.text = level.ToString();
+		}
+
+		void OnEnemyKilled() {
+			_playerController.AddXp(1);
 		}
 
 		void Update() {
@@ -128,7 +182,7 @@ namespace SmtProject.Behaviour.Platformer {
 				.SetEase(Ease.OutSine);
 			_knockbackAnim.onComplete += () => { _isHurt = false; };
 
-			CurHp -= 10;
+			_playerController.TakeDamage(10);
 		}
 	}
 }

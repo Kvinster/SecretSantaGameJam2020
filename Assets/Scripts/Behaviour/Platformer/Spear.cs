@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+
+using UnityEngine;
 
 namespace SmtProject.Behaviour.Platformer {
 	public sealed class Spear : MonoBehaviour {
@@ -6,6 +8,8 @@ namespace SmtProject.Behaviour.Platformer {
 
 		bool  _isRecharging;
 		float _rechargeTimer;
+
+		public event Action OnEnemyKilled;
 
 		void Update() {
 			if ( _isRecharging ) {
@@ -26,6 +30,8 @@ namespace SmtProject.Behaviour.Platformer {
 				enemy.StartDying();
 				_isRecharging  = true;
 				_rechargeTimer = RechargeTime;
+
+				OnEnemyKilled?.Invoke();
 			}
 		}
 	}
