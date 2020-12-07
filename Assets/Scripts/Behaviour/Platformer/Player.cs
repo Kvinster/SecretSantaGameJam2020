@@ -21,9 +21,9 @@ namespace SmtProject.Behaviour.Platformer {
 		static readonly int IsHitting   = Animator.StringToHash("IsHitting");
 		static readonly int WalkDirHash = Animator.StringToHash("WalkDir");
 
-		public float KnockbackForce;
-		public float KnockbackHeight;
-		public float KnockbackDuration;
+		public Rigidbody2D Rigidbody;
+		public float       KnockbackForce;
+		public float       KnockbackDuration;
 		[Space]
 		public float    WalkSpeed;
 		public Animator WalkAnimator;
@@ -176,10 +176,8 @@ namespace SmtProject.Behaviour.Platformer {
 			_isHurt = true;
 
 			var curPos = transform.position;
-			_knockbackAnim = transform
-				.DOJump(curPos + (curPos - other.transform.position).normalized * KnockbackForce, KnockbackHeight, 1,
-					KnockbackDuration)
-				.SetEase(Ease.OutSine);
+			Rigidbody.AddForce((curPos - other.transform.position).normalized * KnockbackForce, ForceMode2D.Impulse);
+			_knockbackAnim = DOTween.Sequence().AppendInterval(KnockbackDuration);
 			_knockbackAnim.onComplete += () => { _isHurt = false; };
 
 			_playerController.TakeDamage(10);
