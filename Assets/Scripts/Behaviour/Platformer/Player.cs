@@ -175,10 +175,10 @@ namespace SmtProject.Behaviour.Platformer {
 			}
 			_isHurt = true;
 
+			var curPos = transform.position;
 			_knockbackAnim = transform
-				.DOJump(
-					transform.position + (transform.position - other.transform.position).normalized * KnockbackForce,
-					KnockbackHeight, 1, KnockbackDuration)
+				.DOJump(curPos + (curPos - other.transform.position).normalized * KnockbackForce, KnockbackHeight, 1,
+					KnockbackDuration)
 				.SetEase(Ease.OutSine);
 			_knockbackAnim.onComplete += () => { _isHurt = false; };
 
