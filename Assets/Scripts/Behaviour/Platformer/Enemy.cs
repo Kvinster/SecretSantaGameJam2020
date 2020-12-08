@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 
+using SmtProject.Behaviour.Platformer.StatBar;
 using SmtProject.Behaviour.Utils;
 
+using DG.Tweening;
 using JetBrains.Annotations;
 
 namespace SmtProject.Behaviour.Platformer {
@@ -17,7 +19,13 @@ namespace SmtProject.Behaviour.Platformer {
 		static readonly int IsDying     = Animator.StringToHash("IsDying");
 		static readonly int WalkDirHash = Animator.StringToHash("WalkDir");
 
-		public float WalkSpeed;
+		public int         StartHp = 10;
+		public float       WalkSpeed;
+		public Collider2D  Collider;
+		public Rigidbody2D Rigidbody;
+		[Space]
+		public GameObject   HealthBarRoot;
+		public FloatStatBar HealthBar;
 		[Space]
 		public Animator WalkAnimator;
 		[Space]
@@ -30,9 +38,26 @@ namespace SmtProject.Behaviour.Platformer {
 
 		Transform _target;
 
+		Tween _knockbackAnim;
+
+		int _maxHp;
+		int _curHp;
+		int CurHp {
+			get => _curHp;
+			set {
+				_curHp = value;
+				HealthBar.UpdateView(_curHp);
+			}
+		}
+
 		void Start() {
 			InnerDetectNotifier.OnTriggerEnter += OnInnerDetectObjectEnter;
 			OuterDetectNotifier.OnTriggerExit  += OnOuterDetectObjectExit;
+
+			_maxHp = StartHp;
+			CurHp  = StartHp;
+
+			HealthBar.Init(CurHp, 0, _maxHp);
 		}
 
 		void Update() {
@@ -49,8 +74,36 @@ namespace SmtProject.Behaviour.Platformer {
 			UpdateAnimParams();
 		}
 
-		public void StartDying() {
+		public bool TakeDamage(int damage) {
+			if ( _isDying ) {
+				return false;
+			}
+			CurHp = Mathf.Max(0, CurHp - damage);
+			if ( CurHp == 0 ) {
+				StartDying();
+				return true;
+			}
+			return false;
+		}
+
+		public void Knockback(Vector2 direction, float knockbackForce) {
+			if ( _isDying ) {
+				return;
+			}
+			_knockbackAnim?.Kill(true);
+			_knockbackAnim = DOTween.Sequence()
+				.AppendInterval(0.3f)
+				.AppendCallback(() => { Collider.enabled = true; });
+
+			Collider.enabled = false;
+			Rigidbody.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
+		}
+
+		void StartDying() {
 			_isDying = true;
+			_knockbackAnim?.Kill(true);
+			Collider.enabled = false;
+			HealthBarRoot.SetActive(false);
 			UpdateAnimParams();
 		}
 

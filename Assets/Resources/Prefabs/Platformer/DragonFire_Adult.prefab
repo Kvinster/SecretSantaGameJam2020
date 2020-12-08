@@ -77,6 +77,11 @@ PrefabInstance:
       propertyPath: Offset
       value: -0.15
       objectReference: {fileID: 0}
+    - target: {fileID: 1251705083013362031, guid: dde4fb2d1ddb493409ff67de21bde43e,
+        type: 3}
+      propertyPath: Damage
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 9154693948927393207, guid: dde4fb2d1ddb493409ff67de21bde43e,
         type: 3}
       propertyPath: m_Size.x

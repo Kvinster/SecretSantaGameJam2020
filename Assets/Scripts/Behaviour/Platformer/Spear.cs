@@ -1,10 +1,13 @@
-﻿using System;
+﻿using UnityEngine;
 
-using UnityEngine;
+using System;
 
 namespace SmtProject.Behaviour.Platformer {
 	public sealed class Spear : MonoBehaviour {
-		public float RechargeTime;
+		public int       Damage         = 1;
+		public float     KnockbackForce = 5f;
+		public Transform KnockbackOrigin;
+		public float     RechargeTime;
 
 		bool  _isRecharging;
 		float _rechargeTimer;
@@ -27,11 +30,14 @@ namespace SmtProject.Behaviour.Platformer {
 			}
 			var enemy = other.gameObject.GetComponent<Enemy>();
 			if ( enemy ) {
-				enemy.StartDying();
+				if ( enemy.TakeDamage(Damage) ) {
+					OnEnemyKilled?.Invoke();
+				} else {
+					Vector2 curPos = KnockbackOrigin.position;
+					enemy.Knockback((other.ClosestPoint(curPos) - curPos).normalized, KnockbackForce);
+				}
 				_isRecharging  = true;
 				_rechargeTimer = RechargeTime;
-
-				OnEnemyKilled?.Invoke();
 			}
 		}
 	}
