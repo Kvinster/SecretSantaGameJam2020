@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+
+using UnityEngine;
 
 using SmtProject.Behaviour.Platformer.StatBar;
 using SmtProject.Core.Platformer;
@@ -38,6 +40,8 @@ namespace SmtProject.Behaviour.Platformer {
 		public TMP_Text     CurLevelText;
 		[Space]
 		public Spear Spear;
+		[Space]
+		public List<SimplePlayerAnimationController> Equipment = new List<SimplePlayerAnimationController>();
 
 		PlayerController _playerController;
 
@@ -141,6 +145,10 @@ namespace SmtProject.Behaviour.Platformer {
 			_canAttack = false;
 
 			WalkAnimator.SetTrigger(_curWeaponHash);
+
+			foreach ( var equip in Equipment ) {
+				equip.SetTrigger(_curWeaponHash);
+			}
 		}
 
 		[UsedImplicitly]
@@ -151,6 +159,10 @@ namespace SmtProject.Behaviour.Platformer {
 			WalkAnimator.ResetTrigger(_curWeaponHash);
 
 			UpdateAnimParams();
+
+			foreach ( var equip in Equipment ) {
+				equip.ResetTrigger(_curWeaponHash);
+			}
 		}
 
 		void UpdateWalkParams(Vector2 speed) {
@@ -176,6 +188,10 @@ namespace SmtProject.Behaviour.Platformer {
 			WalkAnimator.SetBool(IsWalkingHash, _isWalking);
 			WalkAnimator.SetBool(IsHittingHash, _isHitting);
 			WalkAnimator.SetInteger(WalkDirHash, (int) _curWalkDir);
+
+			foreach ( var equip in Equipment ) {
+				equip.UpdateAnimParams(true, _isWalking, _isHitting, (int) _curWalkDir);
+			}
 		}
 
 		void OnCollisionEnter2D(Collision2D other) {
