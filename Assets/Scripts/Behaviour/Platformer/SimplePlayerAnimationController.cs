@@ -9,11 +9,16 @@ namespace SmtProject.Behaviour.Platformer {
 
 		public Animator Animator;
 
+		bool IsActive => gameObject.activeInHierarchy;
+
 		void Reset() {
 			Animator = GetComponentInChildren<Animator>();
 		}
 
 		public void UpdateAnimParams(bool isAlive, bool isWalking, bool isHitting, int walkDir) {
+			if ( !IsActive ) {
+				return;
+			}
 			Animator.SetBool(IsAliveHash, isAlive);
 			Animator.SetBool(IsWalkingHash, isWalking);
 			Animator.SetBool(IsHittingHash, isHitting);
@@ -21,10 +26,16 @@ namespace SmtProject.Behaviour.Platformer {
 		}
 
 		public void SetTrigger(int hash) {
+			if ( !IsActive ) {
+				return;
+			}
 			Animator.SetTrigger(hash);
 		}
 
 		public void ResetTrigger(int hash) {
+			if ( !IsActive ) {
+				return;
+			}
 			Animator.ResetTrigger(hash);
 		}
 	}

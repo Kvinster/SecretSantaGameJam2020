@@ -210,5 +210,13 @@ namespace SmtProject.Behaviour.Platformer {
 
 			_playerController.TakeDamage(10);
 		}
+
+		[ContextMenu("Find Equipment")]
+		void FindAnimations() {
+#if UNITY_EDITOR
+			GetComponentsInChildren(Equipment);
+			UnityEditor.EditorUtility.SetDirty(this);
+#endif
+		}
 	}
 }
