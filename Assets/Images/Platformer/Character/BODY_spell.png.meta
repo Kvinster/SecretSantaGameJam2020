@@ -1,103 +1,91 @@
 fileFormatVersion: 2
-guid: 17f28ae0727737b49b796dbb33aacd23
+guid: fc37118b9f0ee104383f499c4082d03a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5119433047952023883
-    second: WEAPON_spear_0
+      213: -8620089241605980998
+    second: BODY_spellcast_0
   - first:
-      213: -7311097249946211112
-    second: WEAPON_spear_1
+      213: 8052917882484846221
+    second: BODY_spellcast_1
   - first:
-      213: -4102455191527292856
-    second: WEAPON_spear_2
+      213: 5044511744780739701
+    second: BODY_spellcast_2
   - first:
-      213: 5467425695630406623
-    second: WEAPON_spear_3
+      213: -7760479260277043587
+    second: BODY_spellcast_3
   - first:
-      213: -3593058132712740355
-    second: WEAPON_spear_4
+      213: -390686675778071333
+    second: BODY_spellcast_4
   - first:
-      213: 4025313446578120552
-    second: WEAPON_spear_5
+      213: -4477178665754770130
+    second: BODY_spellcast_5
   - first:
-      213: 8011670754273416832
-    second: WEAPON_spear_6
+      213: 9151339369364953152
+    second: BODY_spellcast_6
   - first:
-      213: -5633131895549173836
-    second: WEAPON_spear_7
+      213: 7219223413929134842
+    second: BODY_spellcast_7
   - first:
-      213: -6516345473138380923
-    second: WEAPON_spear_8
+      213: 8263674277629843634
+    second: BODY_spellcast_8
   - first:
-      213: 3572189561559791718
-    second: WEAPON_spear_9
+      213: 2732438001440944817
+    second: BODY_spellcast_9
   - first:
-      213: -8996532917822689426
-    second: WEAPON_spear_10
+      213: 7512331741694760475
+    second: BODY_spellcast_10
   - first:
-      213: 5478759586973242412
-    second: WEAPON_spear_11
+      213: -993370038827152736
+    second: BODY_spellcast_11
   - first:
-      213: -7444239764915436902
-    second: WEAPON_spear_12
+      213: -5720519561828323972
+    second: BODY_spellcast_12
   - first:
-      213: -9170693326977019647
-    second: WEAPON_spear_13
+      213: 4707697166962419568
+    second: BODY_spellcast_13
   - first:
-      213: -7847669965991140000
-    second: WEAPON_spear_14
+      213: -7007796496623843737
+    second: BODY_spellcast_14
   - first:
-      213: -7485301911430837772
-    second: WEAPON_spear_15
+      213: -6617898558049412613
+    second: BODY_spellcast_15
   - first:
-      213: -9205214578160748874
-    second: WEAPON_spear_16
+      213: 4773455570011409606
+    second: BODY_spellcast_16
   - first:
-      213: 7164975082335247820
-    second: WEAPON_spear_17
+      213: -143104295240509215
+    second: BODY_spellcast_17
   - first:
-      213: 1008644750972151793
-    second: WEAPON_spear_18
+      213: -3257314253164259178
+    second: BODY_spellcast_18
   - first:
-      213: -3425878764932001485
-    second: WEAPON_spear_19
+      213: -71272348753675873
+    second: BODY_spellcast_19
   - first:
-      213: 2049419683953892753
-    second: WEAPON_spear_20
+      213: -1949503191420922197
+    second: BODY_spellcast_20
   - first:
-      213: -6648930402643947554
-    second: WEAPON_spear_21
+      213: -9142133662020568672
+    second: BODY_spellcast_21
   - first:
-      213: 2678721146271298606
-    second: WEAPON_spear_22
+      213: 3859486506209491031
+    second: BODY_spellcast_22
   - first:
-      213: -2453254508788676320
-    second: WEAPON_spear_23
+      213: -3097763369806371895
+    second: BODY_spellcast_23
   - first:
-      213: 1662520408213211654
-    second: WEAPON_spear_24
+      213: 2189120991835940578
+    second: BODY_spellcast_24
   - first:
-      213: -8795601956560020672
-    second: WEAPON_spear_25
+      213: -9018165607794068190
+    second: BODY_spellcast_25
   - first:
-      213: 3216056456417752469
-    second: WEAPON_spear_26
+      213: 6573086461931535451
+    second: BODY_spellcast_26
   - first:
-      213: -2664868607435169167
-    second: WEAPON_spear_27
-  - first:
-      213: 2687529408021627106
-    second: WEAPON_spear_28
-  - first:
-      213: 4266322544775288110
-    second: WEAPON_spear_29
-  - first:
-      213: -5321624980173069151
-    second: WEAPON_spear_30
-  - first:
-      213: 548427186859844636
-    second: WEAPON_spear_31
+      213: -7201249733047290776
+    second: BODY_spellcast_27
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -207,7 +195,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: WEAPON_spear_0
+      name: BODY_spellcast_0
       rect:
         serializedVersion: 2
         x: 0
@@ -221,14 +209,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b416392bb31eb0740800000000000000
-      internalID: 5119433047952023883
+      spriteID: abcb8e5818a4f5880800000000000000
+      internalID: -8620089241605980998
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_1
+      name: BODY_spellcast_1
       rect:
         serializedVersion: 2
         x: 64
@@ -242,14 +230,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8dcee9a79c3c98a90800000000000000
-      internalID: -7311097249946211112
+      spriteID: d8e66eed526b1cf60800000000000000
+      internalID: 8052917882484846221
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_2
+      name: BODY_spellcast_2
       rect:
         serializedVersion: 2
         x: 128
@@ -263,14 +251,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8400f023db62117c0800000000000000
-      internalID: -4102455191527292856
+      spriteID: 57421f474b4b10640800000000000000
+      internalID: 5044511744780739701
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_3
+      name: BODY_spellcast_3
       rect:
         serializedVersion: 2
         x: 192
@@ -284,14 +272,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fd3b4e7d3b230eb40800000000000000
-      internalID: 5467425695630406623
+      spriteID: d7e8664ca3d3d4490800000000000000
+      internalID: -7760479260277043587
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_4
+      name: BODY_spellcast_4
       rect:
         serializedVersion: 2
         x: 256
@@ -305,14 +293,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: df924564aa4e22ec0800000000000000
-      internalID: -3593058132712740355
+      spriteID: bd415cfc980049af0800000000000000
+      internalID: -390686675778071333
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_5
+      name: BODY_spellcast_5
       rect:
         serializedVersion: 2
         x: 320
@@ -326,14 +314,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 86764eca049ccd730800000000000000
-      internalID: 4025313446578120552
+      spriteID: e25cabf79bdddd1c0800000000000000
+      internalID: -4477178665754770130
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_6
+      name: BODY_spellcast_6
       rect:
         serializedVersion: 2
         x: 384
@@ -347,35 +335,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0865ad57a1c2f2f60800000000000000
-      internalID: 8011670754273416832
+      spriteID: 0489b0aaba6100f70800000000000000
+      internalID: 9151339369364953152
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_7
-      rect:
-        serializedVersion: 2
-        x: 448
-        y: 192
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4bf5ed8f26813d1b0800000000000000
-      internalID: -5633131895549173836
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WEAPON_spear_8
+      name: BODY_spellcast_7
       rect:
         serializedVersion: 2
         x: 0
@@ -389,14 +356,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 58facd7315a4195a0800000000000000
-      internalID: -6516345473138380923
+      spriteID: afacd652275df2460800000000000000
+      internalID: 7219223413929134842
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_9
+      name: BODY_spellcast_8
       rect:
         serializedVersion: 2
         x: 64
@@ -410,14 +377,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 668312fda77f29130800000000000000
-      internalID: 3572189561559791718
+      spriteID: 2b8d8a109f77ea270800000000000000
+      internalID: 8263674277629843634
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_10
+      name: BODY_spellcast_9
       rect:
         serializedVersion: 2
         x: 128
@@ -431,14 +398,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e6fe1171af4e52380800000000000000
-      internalID: -8996532917822689426
+      spriteID: 1b27aae92e19be520800000000000000
+      internalID: 2732438001440944817
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_11
+      name: BODY_spellcast_10
       rect:
         serializedVersion: 2
         x: 192
@@ -452,14 +419,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c245e4f01d6780c40800000000000000
-      internalID: 5478759586973242412
+      spriteID: b169b92cae9214860800000000000000
+      internalID: 7512331741694760475
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_12
+      name: BODY_spellcast_11
       rect:
         serializedVersion: 2
         x: 256
@@ -473,14 +440,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a92c065006fb0b890800000000000000
-      internalID: -7444239764915436902
+      spriteID: 0aa01397637d632f0800000000000000
+      internalID: -993370038827152736
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_13
+      name: BODY_spellcast_12
       rect:
         serializedVersion: 2
         x: 320
@@ -494,14 +461,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1015d7de1072bb080800000000000000
-      internalID: -9170693326977019647
+      spriteID: c7dac8264c1ac90b0800000000000000
+      internalID: -5720519561828323972
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_14
+      name: BODY_spellcast_13
       rect:
         serializedVersion: 2
         x: 384
@@ -515,35 +482,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 065a892aeb9771390800000000000000
-      internalID: -7847669965991140000
+      spriteID: 07768e281a9155140800000000000000
+      internalID: 4707697166962419568
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_15
-      rect:
-        serializedVersion: 2
-        x: 448
-        y: 128
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4f9cc94029dde1890800000000000000
-      internalID: -7485301911430837772
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WEAPON_spear_16
+      name: BODY_spellcast_14
       rect:
         serializedVersion: 2
         x: 0
@@ -557,14 +503,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6b63b7bcc12804080800000000000000
-      internalID: -9205214578160748874
+      spriteID: 7664288173e4fbe90800000000000000
+      internalID: -7007796496623843737
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_17
+      name: BODY_spellcast_15
       rect:
         serializedVersion: 2
         x: 64
@@ -578,14 +524,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ccd1e1f20ea1f6360800000000000000
-      internalID: 7164975082335247820
+      spriteID: bf915e713508824a0800000000000000
+      internalID: -6617898558049412613
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_18
+      name: BODY_spellcast_16
       rect:
         serializedVersion: 2
         x: 128
@@ -599,14 +545,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1f7e1469e0d6ffd00800000000000000
-      internalID: 1008644750972151793
+      spriteID: 6ccc3a1dc88be3240800000000000000
+      internalID: 4773455570011409606
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_19
+      name: BODY_spellcast_17
       rect:
         serializedVersion: 2
         x: 192
@@ -620,14 +566,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3319ca41a65d470d0800000000000000
-      internalID: -3425878764932001485
+      spriteID: 1e85b54d667930ef0800000000000000
+      internalID: -143104295240509215
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_20
+      name: BODY_spellcast_18
       rect:
         serializedVersion: 2
         x: 256
@@ -641,14 +587,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 19dd3c12850017c10800000000000000
-      internalID: 2049419683953892753
+      spriteID: 698d35ad1f1bbc2d0800000000000000
+      internalID: -3257314253164259178
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_21
+      name: BODY_spellcast_19
       rect:
         serializedVersion: 2
         x: 320
@@ -662,14 +608,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: edfcc1eb6014ab3a0800000000000000
-      internalID: -6648930402643947554
+      spriteID: f99ba3a2d2ac20ff0800000000000000
+      internalID: -71272348753675873
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_22
+      name: BODY_spellcast_20
       rect:
         serializedVersion: 2
         x: 384
@@ -683,35 +629,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e24f3d7a0babc2520800000000000000
-      internalID: 2678721146271298606
+      spriteID: ba69dd22d29f1f4e0800000000000000
+      internalID: -1949503191420922197
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_23
-      rect:
-        serializedVersion: 2
-        x: 448
-        y: 64
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 029860ca50a44fdd0800000000000000
-      internalID: -2453254508788676320
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WEAPON_spear_24
+      name: BODY_spellcast_21
       rect:
         serializedVersion: 2
         x: 0
@@ -725,14 +650,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 60ac26bb085721710800000000000000
-      internalID: 1662520408213211654
+      spriteID: 0a97f1a1fdd902180800000000000000
+      internalID: -9142133662020568672
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_25
+      name: BODY_spellcast_22
       rect:
         serializedVersion: 2
         x: 64
@@ -746,14 +671,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 04b52812f9ebfe580800000000000000
-      internalID: -8795601956560020672
+      spriteID: 758b70a6786af8530800000000000000
+      internalID: 3859486506209491031
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_26
+      name: BODY_spellcast_23
       rect:
         serializedVersion: 2
         x: 128
@@ -767,14 +692,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 595b166ce4ab1ac20800000000000000
-      internalID: 3216056456417752469
+      spriteID: 9c36978b0a88205d0800000000000000
+      internalID: -3097763369806371895
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_27
+      name: BODY_spellcast_24
       rect:
         serializedVersion: 2
         x: 192
@@ -788,14 +713,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 172acb0ee1c740bd0800000000000000
-      internalID: -2664868607435169167
+      spriteID: 2e66bb091f1516e10800000000000000
+      internalID: 2189120991835940578
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_28
+      name: BODY_spellcast_25
       rect:
         serializedVersion: 2
         x: 256
@@ -809,14 +734,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2e08b88e1c50c4520800000000000000
-      internalID: 2687529408021627106
+      spriteID: 2253ac5f82a09d280800000000000000
+      internalID: -9018165607794068190
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_29
+      name: BODY_spellcast_26
       rect:
         serializedVersion: 2
         x: 320
@@ -830,14 +755,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e25529220c5053b30800000000000000
-      internalID: 4266322544775288110
+      spriteID: b5cbb59bf4b483b50800000000000000
+      internalID: 6573086461931535451
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WEAPON_spear_30
+      name: BODY_spellcast_27
       rect:
         serializedVersion: 2
         x: 384
@@ -851,29 +776,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1a460f4964ac526b0800000000000000
-      internalID: -5321624980173069151
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WEAPON_spear_31
-      rect:
-        serializedVersion: 2
-        x: 448
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c14a2f9ee976c9700800000000000000
-      internalID: 548427186859844636
+      spriteID: 864f6da8585001c90800000000000000
+      internalID: -7201249733047290776
       vertices: []
       indices: 
       edges: []
