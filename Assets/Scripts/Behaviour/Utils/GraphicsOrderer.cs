@@ -33,5 +33,13 @@ namespace SmtProject.Behaviour.Utils {
 				sr.sortingOrder = startIndex++;
 			}
 		}
+
+		[ContextMenu("Update")]
+		void EditorUpdate() {
+			var startIndex = Mathf.CeilToInt(-(transform.position.y + Offset) * 1000f);
+			foreach ( var sr in GetComponentsInChildren<SpriteRenderer>() ) {
+				sr.sortingOrder = startIndex++;
+			}
+		}
 	}
 }
