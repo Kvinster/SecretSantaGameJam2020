@@ -25,12 +25,14 @@ namespace SmtProject.Editor {
 			}
 		}
 
-		const string BasePath = "Assets/Animations/Platformer/Generated";
+		const string BaseAnimationPath = "Assets/Animations/Platformer/Generated";
+		const string BasePrefabPath    = "Assets/Prefabs/Platformer/Generated";
 
 		static readonly string[] Directions = { "Up", "Left", "Down", "Right" };
 
 		DefaultAsset _targetFolder;
 		DefaultAsset _referenceFolder;
+		bool         _addEvents;
 
 		readonly ReferencedSpritesheet _walkSheet   = new ReferencedSpritesheet();
 		readonly ReferencedSpritesheet _hurtSheet   = new ReferencedSpritesheet();
@@ -41,15 +43,12 @@ namespace SmtProject.Editor {
 
 		AnimationClip _idleReferenceClip;
 
-		GameObject _targetGameObject;
-
 		string _animName = string.Empty;
 
-		bool HaveName             => !string.IsNullOrEmpty(_animName);
-		bool HaveTargetGameObject => _targetGameObject;
+		bool HaveName => !string.IsNullOrEmpty(_animName);
 
 		bool ReadyToGenerate => AllValid(_walkSheet, _hurtSheet, _bowSheet, _spellSheet, _slashSheet, _thrustSheet) &&
-		                        HaveName && HaveTargetGameObject;
+		                        HaveName;
 
 		void OnGUI() {
 			_animName = EditorGUILayout.TextField("Name", _animName);
@@ -64,7 +63,7 @@ namespace SmtProject.Editor {
 			}
 
 			var referenceFolder =
-				EditorGUILayout.ObjectField("Sprites", _referenceFolder, typeof(DefaultAsset), false) as DefaultAsset;
+				EditorGUILayout.ObjectField("References", _referenceFolder, typeof(DefaultAsset), false) as DefaultAsset;
 			if ( referenceFolder == null ) {
 				_referenceFolder = null;
 			} else if ( referenceFolder != _referenceFolder ) {
@@ -72,7 +71,7 @@ namespace SmtProject.Editor {
 				TryExtractReferenceClips(_referenceFolder);
 			}
 
-			DrawTargetGameObjectField();
+			_addEvents = EditorGUILayout.Toggle("Add events", _addEvents);
 
 			EditorGUILayout.Space();
 			DrawSpritesheetValid("Bow", _bowSheet);
@@ -106,8 +105,7 @@ namespace SmtProject.Editor {
 				_bowSheet.Clear();
 				_slashSheet.Clear();
 				_thrustSheet.Clear();
-				_animName         = string.Empty;
-				_targetGameObject = null;
+				_animName = string.Empty;
 			}
 		}
 
@@ -235,17 +233,36 @@ namespace SmtProject.Editor {
 		}
 
 		void GenerateAnimations() {
-			var parent = Path.Combine(BasePath, _animName);
-			var di     = new DirectoryInfo(parent);
-			if ( !di.Exists ) {
-				di.Create();
+			var animationParent = Path.Combine(BaseAnimationPath, _animName);
+			var animationDi     = new DirectoryInfo(animationParent);
+			if ( !animationDi.Exists ) {
+				animationDi.Create();
 			}
 
-			var path               = Path.Combine(parent, "Controller.asset");
-			var animatorController = AnimatorController.CreateAnimatorControllerAtPath(path);
+			var prefabParent = Path.Combine(BasePrefabPath, _animName);
+			var prefabDi     = new DirectoryInfo(prefabParent);
+			if ( !prefabDi.Exists ) {
+				prefabDi.Create();
+			}
+
+			var animationPath      = Path.Combine(animationParent, "Controller.asset");
+			var animatorController = AnimatorController.CreateAnimatorControllerAtPath(animationPath);
+
+			var prefabPath   = Path.Combine(prefabParent, _animName + ".prefab");
+			var instanceRoot = new GameObject(_animName);
+			instanceRoot.AddComponent<SpriteRenderer>();
+			var animator = instanceRoot.AddComponent<Animator>();
+			animator.runtimeAnimatorController = animatorController;
+			var prefab = PrefabUtility.SaveAsPrefabAsset(instanceRoot, prefabPath, out var success);
+			if ( !success ) {
+				Debug.LogError("Can't save instance as prefab");
+				return;
+			}
+			DestroyImmediate(instanceRoot);
 
 			animatorController.AddParameter("IsAlive", AnimatorControllerParameterType.Bool);
 			animatorController.AddParameter("IsWalking", AnimatorControllerParameterType.Bool);
+			animatorController.AddParameter("IsHitting", AnimatorControllerParameterType.Bool);
 			animatorController.AddParameter("WalkDir", AnimatorControllerParameterType.Int);
 			animatorController.AddParameter("Slash", AnimatorControllerParameterType.Trigger);
 			animatorController.AddParameter("Thrust", AnimatorControllerParameterType.Trigger);
@@ -263,11 +280,15 @@ namespace SmtProject.Editor {
 						parameter = "IsWalking"
 					},
 					new AnimatorCondition {
+						mode      = AnimatorConditionMode.IfNot,
+						parameter = "IsHitting"
+					},
+					new AnimatorCondition {
 						mode      = AnimatorConditionMode.Equals,
 						parameter = "WalkDir",
 						threshold = i
 					}
-				}, animatorController, _walkSheet, _idleReferenceClip);
+				}, animatorController, _walkSheet, prefab, loop: true, _idleReferenceClip);
 			GenerateDirectionalAnim("Walk", 36, (i, q) => (i * 9 + (q < 9 ? q : 0)),
 				(i) => new [] {
 					new AnimatorCondition {
@@ -279,11 +300,15 @@ namespace SmtProject.Editor {
 						parameter = "IsWalking"
 					},
 					new AnimatorCondition {
+						mode      = AnimatorConditionMode.IfNot,
+						parameter = "IsHitting"
+					},
+					new AnimatorCondition {
 						mode      = AnimatorConditionMode.Equals,
 						parameter = "WalkDir",
 						threshold = i
 					}
-				}, animatorController, _walkSheet);
+				}, animatorController, _walkSheet, prefab, loop: true);
 			GenerateDirectionalAnim("Bow", 52, (i, q) => (i * 13 + ((q < 13) ? q : 2 - (q - 13))),
 				(i) => new [] {
 					new AnimatorCondition {
@@ -297,10 +322,14 @@ namespace SmtProject.Editor {
 					},
 					new AnimatorCondition {
 						mode      = AnimatorConditionMode.If,
+						parameter = "IsHitting"
+					},
+					new AnimatorCondition {
+						mode      = AnimatorConditionMode.If,
 						parameter = "Bow",
 						threshold = i
 					}
-				}, animatorController, _bowSheet);
+				}, animatorController, _bowSheet, prefab);
 			GenerateDirectionalAnim("Spellcast", 28, (i, q) => {
 				var res = i * 7;
 				if ( q >= 6 ) {
@@ -333,10 +362,14 @@ namespace SmtProject.Editor {
 				},
 				new AnimatorCondition {
 					mode      = AnimatorConditionMode.If,
+					parameter = "IsHitting"
+				},
+				new AnimatorCondition {
+					mode      = AnimatorConditionMode.If,
 					parameter = "Spell",
 					threshold = i
 				}
-			}, animatorController, _spellSheet);
+			}, animatorController, _spellSheet, prefab);
 			GenerateDirectionalAnim("Slash", 24, (i, q) => (i * 6 + ((q < 6) ? q : 0)),
 				(i) => new [] {
 					new AnimatorCondition {
@@ -350,10 +383,14 @@ namespace SmtProject.Editor {
 					},
 					new AnimatorCondition {
 						mode      = AnimatorConditionMode.If,
+						parameter = "IsHitting"
+					},
+					new AnimatorCondition {
+						mode      = AnimatorConditionMode.If,
 						parameter = "Slash",
 						threshold = i
 					}
-				}, animatorController, _slashSheet);
+				}, animatorController, _slashSheet, prefab);
 			GenerateDirectionalAnim("Thrust", 32, (i, q) => (i * 8 + ((q < 8) ? q : (3 - (q - 8)))),
 				(i) => new [] {
 					new AnimatorCondition {
@@ -367,22 +404,29 @@ namespace SmtProject.Editor {
 					},
 					new AnimatorCondition {
 						mode      = AnimatorConditionMode.If,
+						parameter = "IsHitting"
+					},
+					new AnimatorCondition {
+						mode      = AnimatorConditionMode.If,
 						parameter = "Thrust",
 						threshold = i
 					}
-				}, animatorController, _thrustSheet);
+				}, animatorController, _thrustSheet, prefab);
 			GenerateSimpleAnim("Hurt", 6, (i) => (i),
 				() => new [] {
 					new AnimatorCondition {
 						mode      = AnimatorConditionMode.IfNot,
 						parameter = "IsAlive"
 					},
-				}, animatorController, _hurtSheet);
+				}, animatorController, _hurtSheet, prefab);
+
+			EditorUtility.SetDirty(animatorController);
 		}
 
 		void GenerateDirectionalAnim(string animName, int spritesheetSize, Func<int, int, int> spriteChooser,
 			Func<int, AnimatorCondition[]> conditionFactory, AnimatorController animatorController,
-			ReferencedSpritesheet spritesheet, AnimationClip overrideReferenceClip = null) {
+			ReferencedSpritesheet spritesheet, GameObject targetGameObject, bool loop = false,
+			AnimationClip overrideReferenceClip = null) {
 			var sprites = spritesheet.Sprites;
 			if ( sprites.Count != spritesheetSize ) {
 				Debug.LogErrorFormat("Invalid spritesheet size for anim '{0}': '{1}'", animName, spritesheetSize);
@@ -395,7 +439,16 @@ namespace SmtProject.Editor {
 
 			for ( var i = 0; i < Directions.Length; i++ ) {
 				var direction = Directions[i];
-				var clip      = new AnimationClip { name = $"{animName}{direction}" };
+				var clipName  = $"{animName}{direction}";
+				var clip = new AnimationClip {
+					name     = clipName,
+					wrapMode = loop ? WrapMode.Default : WrapMode.Loop
+				};
+				if ( loop ) {
+					var settings = AnimationUtility.GetAnimationClipSettings(clip);
+					settings.loopTime = true;
+					AnimationUtility.SetAnimationClipSettings(clip, settings);
+				}
 
 				var bindings = AnimationUtility.GetObjectReferenceCurveBindings(referenceClip);
 				Debug.Assert(bindings.Length == 1);
@@ -405,7 +458,7 @@ namespace SmtProject.Editor {
 					var mod = new PropertyModification {
 						propertyPath = referenceBinding.path,
 					};
-					AnimationUtility.PropertyModificationToEditorCurveBinding(mod, _targetGameObject, out var binding);
+					AnimationUtility.PropertyModificationToEditorCurveBinding(mod, targetGameObject, out var binding);
 					binding.propertyName = referenceBinding.propertyName;
 					binding.path         = referenceBinding.path;
 					binding.type         = referenceBinding.type;
@@ -425,7 +478,7 @@ namespace SmtProject.Editor {
 					var mod = new PropertyModification {
 						propertyPath = referenceBinding.path,
 					};
-					AnimationUtility.PropertyModificationToEditorCurveBinding(mod, _targetGameObject, out var binding);
+					AnimationUtility.PropertyModificationToEditorCurveBinding(mod, targetGameObject, out var binding);
 					var curve = new AnimationCurve();
 					for ( var j = 0; j < referenceCurve.length; ++j ) {
 						var referenceKey = referenceCurve.keys[j];
@@ -434,6 +487,26 @@ namespace SmtProject.Editor {
 					AnimationUtility.SetEditorCurve(clip, binding, curve);
 				}
 
+				if ( _addEvents ) {
+					var clipEvents = new List<AnimationEvent>();
+					foreach ( var referenceEvent in AnimationUtility.GetAnimationEvents(referenceClip) ) {
+						var ev = new AnimationEvent {
+							time                     = referenceEvent.time,
+							functionName             = referenceEvent.functionName,
+							floatParameter           = referenceEvent.floatParameter,
+							intParameter             = referenceEvent.intParameter,
+							messageOptions           = referenceEvent.messageOptions,
+							stringParameter          = referenceEvent.stringParameter,
+							objectReferenceParameter = referenceEvent.objectReferenceParameter
+						};
+						clipEvents.Add(ev);
+					}
+					if ( clipEvents.Count > 0 ) {
+						AnimationUtility.SetAnimationEvents(clip, clipEvents.ToArray());
+					}
+				}
+
+				AssetDatabase.CreateAsset(clip, AssetDatabase.GetAssetPath(animatorController).Replace("Controller.asset", clipName + ".anim"));
 				var animatorState = animatorController.AddMotion(clip);
 				animatorState.name = $"{animName}{direction}";
 
@@ -447,7 +520,7 @@ namespace SmtProject.Editor {
 
 		void GenerateSimpleAnim(string animName, int spritesheetSize, Func<int, int> spriteChooser,
 			Func<AnimatorCondition[]> conditionFactory, AnimatorController animatorController,
-			ReferencedSpritesheet spritesheet) {
+			ReferencedSpritesheet spritesheet, GameObject targetGameObject) {
 			var sprites = spritesheet.Sprites;
 			if ( sprites.Count != spritesheetSize ) {
 				Debug.LogErrorFormat("Invalid spritesheet size for anim '{0}': '{1}'", animName, spritesheetSize);
@@ -458,7 +531,10 @@ namespace SmtProject.Editor {
 
 			var stateMachine = animatorController.layers[0].stateMachine;
 
-			var clip = new AnimationClip { name = animName };
+			var clip = new AnimationClip {
+				name     = animName,
+				wrapMode = WrapMode.Loop
+			};
 
 			var bindings = AnimationUtility.GetObjectReferenceCurveBindings(referenceClip);
 			Debug.Assert(bindings.Length == 1);
@@ -468,7 +544,7 @@ namespace SmtProject.Editor {
 				var mod = new PropertyModification {
 					propertyPath = referenceBinding.path,
 				};
-				AnimationUtility.PropertyModificationToEditorCurveBinding(mod, _targetGameObject, out var binding);
+				AnimationUtility.PropertyModificationToEditorCurveBinding(mod, targetGameObject, out var binding);
 				binding.propertyName = referenceBinding.propertyName;
 				binding.path         = referenceBinding.path;
 				binding.type         = referenceBinding.type;
@@ -488,7 +564,7 @@ namespace SmtProject.Editor {
 				var mod = new PropertyModification {
 					propertyPath = referenceBinding.path,
 				};
-				AnimationUtility.PropertyModificationToEditorCurveBinding(mod, _targetGameObject, out var binding);
+				AnimationUtility.PropertyModificationToEditorCurveBinding(mod, targetGameObject, out var binding);
 				var curve = new AnimationCurve();
 				for ( var j = 0; j < referenceCurve.length; ++j ) {
 					var referenceKey = referenceCurve.keys[j];
@@ -497,6 +573,26 @@ namespace SmtProject.Editor {
 				AnimationUtility.SetEditorCurve(clip, binding, curve);
 			}
 
+			if ( _addEvents ) {
+				var clipEvents = new List<AnimationEvent>();
+				foreach ( var referenceEvent in AnimationUtility.GetAnimationEvents(referenceClip) ) {
+					var ev = new AnimationEvent {
+						time                     = referenceEvent.time,
+						functionName             = referenceEvent.functionName,
+						floatParameter           = referenceEvent.floatParameter,
+						intParameter             = referenceEvent.intParameter,
+						messageOptions           = referenceEvent.messageOptions,
+						stringParameter          = referenceEvent.stringParameter,
+						objectReferenceParameter = referenceEvent.objectReferenceParameter
+					};
+					clipEvents.Add(ev);
+				}
+				if ( clipEvents.Count > 0 ) {
+					AnimationUtility.SetAnimationEvents(clip, clipEvents.ToArray());
+				}
+			}
+
+			AssetDatabase.CreateAsset(clip, AssetDatabase.GetAssetPath(animatorController).Replace("Controller.asset", animName + ".anim"));
 			var animatorState = animatorController.AddMotion(clip);
 			animatorState.name = $"{animName}";
 
@@ -504,13 +600,6 @@ namespace SmtProject.Editor {
 			transition.duration    = 0f;
 			transition.hasExitTime = false;
 			transition.conditions  = conditionFactory();
-		}
-
-		void DrawTargetGameObjectField() {
-			var obj = EditorGUILayout.ObjectField("Target game object", _targetGameObject, typeof(GameObject), true);
-			if ( obj && (obj is GameObject go) ) {
-				_targetGameObject = go;
-			}
 		}
 
 		void DrawSpritesheetValid(string spritesheetName, ReferencedSpritesheet spritesheet) {

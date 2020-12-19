@@ -12,14 +12,19 @@ namespace SmtProject.Behaviour.Platformer {
 	public sealed class Player : MonoBehaviour {
 		enum WalkDir {
 			Up    = 0,
-			Down  = 1,
-			Left  = 2,
+			Left  = 1,
+			Down  = 2,
 			Right = 3
 		}
 
-		static readonly int IsWalking   = Animator.StringToHash("IsWalking");
-		static readonly int IsHitting   = Animator.StringToHash("IsHitting");
-		static readonly int WalkDirHash = Animator.StringToHash("WalkDir");
+		static readonly int IsAliveHash   = Animator.StringToHash("IsAlive");
+		static readonly int IsWalkingHash = Animator.StringToHash("IsWalking");
+		static readonly int IsHittingHash = Animator.StringToHash("IsHitting");
+		static readonly int WalkDirHash   = Animator.StringToHash("WalkDir");
+		static readonly int BowHash       = Animator.StringToHash("Bow");
+		static readonly int SlashHash     = Animator.StringToHash("Slash");
+		static readonly int ThrustHash    = Animator.StringToHash("Thrust");
+		static readonly int SpellHash     = Animator.StringToHash("Spell");
 
 		public Rigidbody2D Rigidbody;
 		public float       KnockbackForce;
@@ -42,6 +47,8 @@ namespace SmtProject.Behaviour.Platformer {
 		bool    _isWalking;
 		bool    _isHitting;
 		WalkDir _curWalkDir;
+
+		int _curWeaponHash = ThrustHash;
 
 		Tween _knockbackAnim;
 
@@ -115,7 +122,6 @@ namespace SmtProject.Behaviour.Platformer {
 			if ( _canAttack && Input.GetKeyDown(KeyCode.Space) ) {
 				Hit();
 			} else if ( !_isHitting ) {
-
 				var input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 				if ( input != Vector2.zero ) {
 
@@ -133,12 +139,17 @@ namespace SmtProject.Behaviour.Platformer {
 		void Hit() {
 			_isHitting = true;
 			_canAttack = false;
+
+			WalkAnimator.SetTrigger(_curWeaponHash);
 		}
 
 		[UsedImplicitly]
 		void StopHit() {
 			_isHitting = false;
 			_canAttack = true;
+
+			WalkAnimator.ResetTrigger(_curWeaponHash);
+
 			UpdateAnimParams();
 		}
 
@@ -161,8 +172,9 @@ namespace SmtProject.Behaviour.Platformer {
 		}
 
 		void UpdateAnimParams() {
-			WalkAnimator.SetBool(IsWalking, _isWalking);
-			WalkAnimator.SetBool(IsHitting, _isHitting);
+			WalkAnimator.SetBool(IsAliveHash, true);
+			WalkAnimator.SetBool(IsWalkingHash, _isWalking);
+			WalkAnimator.SetBool(IsHittingHash, _isHitting);
 			WalkAnimator.SetInteger(WalkDirHash, (int) _curWalkDir);
 		}
 
