@@ -162,7 +162,7 @@ namespace SmtProject.Editor {
 			}
 		}
 
-		public void GenerateAnimations() {
+		public void GenerateAnimations(bool silent = false) {
 			var animationParent = Path.Combine(BaseAnimationPath, AnimName);
 			var animationDi     = new DirectoryInfo(animationParent);
 			if ( !animationDi.Exists ) {
@@ -219,7 +219,7 @@ namespace SmtProject.Editor {
 						parameter = "WalkDir",
 						threshold = i
 					}
-				}, animatorController, WalkSheet, prefab, loop: true, IdleReferenceClip);
+				}, animatorController, WalkSheet, prefab, silent, true, IdleReferenceClip);
 			GenerateDirectionalAnim("Walk", 36, (i, q) => (i * 9 + (q < 9 ? q : 0)),
 				(i) => new [] {
 					new AnimatorCondition {
@@ -239,7 +239,7 @@ namespace SmtProject.Editor {
 						parameter = "WalkDir",
 						threshold = i
 					}
-				}, animatorController, WalkSheet, prefab, loop: true);
+				}, animatorController, WalkSheet, prefab, silent, true);
 			GenerateDirectionalAnim("Bow", 52, (i, q) => (i * 13 + ((q < 13) ? q : 2 - (q - 13))),
 				(i) => new [] {
 					new AnimatorCondition {
@@ -260,7 +260,7 @@ namespace SmtProject.Editor {
 						parameter = "Bow",
 						threshold = i
 					}
-				}, animatorController, BowSheet, prefab);
+				}, animatorController, BowSheet, prefab, silent);
 			GenerateDirectionalAnim("Spellcast", 28, (i, q) => {
 				var res = i * 7;
 				if ( q >= 6 ) {
@@ -300,7 +300,7 @@ namespace SmtProject.Editor {
 					parameter = "Spell",
 					threshold = i
 				}
-			}, animatorController, SpellSheet, prefab);
+			}, animatorController, SpellSheet, prefab, silent);
 			GenerateDirectionalAnim("Slash", 24, (i, q) => (i * 6 + ((q < 6) ? q : 0)),
 				(i) => new [] {
 					new AnimatorCondition {
@@ -321,7 +321,7 @@ namespace SmtProject.Editor {
 						parameter = "Slash",
 						threshold = i
 					}
-				}, animatorController, SlashSheet, prefab);
+				}, animatorController, SlashSheet, prefab, silent);
 			GenerateDirectionalAnim("Thrust", 32, (i, q) => (i * 8 + ((q < 8) ? q : (3 - (q - 8)))),
 				(i) => new [] {
 					new AnimatorCondition {
@@ -342,14 +342,14 @@ namespace SmtProject.Editor {
 						parameter = "Thrust",
 						threshold = i
 					}
-				}, animatorController, ThrustSheet, prefab);
+				}, animatorController, ThrustSheet, prefab, silent);
 			GenerateSimpleAnim("Hurt", 6, (i) => (i),
 				() => new [] {
 					new AnimatorCondition {
 						mode      = AnimatorConditionMode.IfNot,
 						parameter = "IsAlive"
 					},
-				}, animatorController, HurtSheet, prefab);
+				}, animatorController, HurtSheet, prefab, silent);
 
 			EditorUtility.SetDirty(animatorController);
 		}
@@ -383,8 +383,14 @@ namespace SmtProject.Editor {
 
 		void GenerateDirectionalAnim(string animName, int spritesheetSize, Func<int, int, int> spriteChooser,
 			Func<int, AnimatorCondition[]> conditionFactory, AnimatorController animatorController,
-			ReferencedSpritesheet spritesheet, GameObject targetGameObject, bool loop = false,
+			ReferencedSpritesheet spritesheet, GameObject targetGameObject, bool silent, bool loop = false,
 			AnimationClip overrideReferenceClip = null) {
+			if ( !spritesheet.IsValid ) {
+				if ( !silent ) {
+					Debug.LogErrorFormat("Spritesheet for anim '{0}' is invalid", animName);
+				}
+				return;
+			}
 			var sprites = spritesheet.Sprites;
 			if ( sprites.Count != spritesheetSize ) {
 				Debug.LogErrorFormat("Invalid spritesheet size for anim '{0}': '{1}'", animName, spritesheetSize);
@@ -478,7 +484,13 @@ namespace SmtProject.Editor {
 
 		void GenerateSimpleAnim(string animName, int spritesheetSize, Func<int, int> spriteChooser,
 			Func<AnimatorCondition[]> conditionFactory, AnimatorController animatorController,
-			ReferencedSpritesheet spritesheet, GameObject targetGameObject) {
+			ReferencedSpritesheet spritesheet, GameObject targetGameObject, bool silent) {
+			if ( !spritesheet.IsValid ) {
+				if ( !silent ) {
+					Debug.LogErrorFormat("Spritesheet for anim '{0}' is invalid", animName);
+				}
+				return;
+			}
 			var sprites = spritesheet.Sprites;
 			if ( sprites.Count != spritesheetSize ) {
 				Debug.LogErrorFormat("Invalid spritesheet size for anim '{0}': '{1}'", animName, spritesheetSize);

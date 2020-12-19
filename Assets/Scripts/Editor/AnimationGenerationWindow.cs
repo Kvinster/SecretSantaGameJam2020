@@ -7,6 +7,8 @@ namespace SmtProject.Editor {
 	public sealed class AnimationGenerationWindow : EditorWindow {
 		readonly AnimationGenerator _generator = new AnimationGenerator();
 
+		bool _allowIncompleteSpritesheets;
+
 		bool ReadyToGenerate => _generator.ReadyToGenerate;
 
 		bool AddEvents => _generator.AddEvents;
@@ -47,6 +49,8 @@ namespace SmtProject.Editor {
 			}
 
 			_generator.AddEvents = EditorGUILayout.Toggle("Add events", AddEvents);
+			_allowIncompleteSpritesheets =
+				EditorGUILayout.Toggle("Allow incomplete sheets", _allowIncompleteSpritesheets);
 
 			EditorGUILayout.Space();
 			DrawSpritesheetValid("Bow", BowSheet);
@@ -58,9 +62,9 @@ namespace SmtProject.Editor {
 			DrawLabelValid(IdleReferenceClip, $"Idle is {(IdleReferenceClip ? "value" : "invalid")}");
 			EditorGUILayout.Space();
 
-			if ( ReadyToGenerate ) {
+			if ( _allowIncompleteSpritesheets || ReadyToGenerate ) {
 				if ( GUILayout.Button("Generate") ) {
-					_generator.GenerateAnimations();
+					_generator.GenerateAnimations(_allowIncompleteSpritesheets);
 				}
 			} else {
 				if ( GUILayout.Button("Update values") ) {

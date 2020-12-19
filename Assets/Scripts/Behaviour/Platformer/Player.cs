@@ -32,8 +32,9 @@ namespace SmtProject.Behaviour.Platformer {
 		public float       KnockbackForce;
 		public float       KnockbackDuration;
 		[Space]
-		public float    WalkSpeed;
-		public Animator WalkAnimator;
+		public float      WalkSpeed;
+		public Animator   Animator;
+		public GameObject WeaponViewRoot;
 		[Space]
 		public FloatStatBar HealthBar;
 		public FloatStatBar XpBar;
@@ -83,6 +84,8 @@ namespace SmtProject.Behaviour.Platformer {
 			OnCurXpAnimLevelChanged(0);
 
 			Spear.OnEnemyKilled += OnEnemyKilled;
+
+			WeaponViewRoot.SetActive(false);
 		}
 
 		void OnCurHpChanged(int curHp) {
@@ -144,7 +147,9 @@ namespace SmtProject.Behaviour.Platformer {
 			_isHitting = true;
 			_canAttack = false;
 
-			WalkAnimator.SetTrigger(_curWeaponHash);
+			Animator.SetTrigger(_curWeaponHash);
+
+			WeaponViewRoot.SetActive(true);
 
 			foreach ( var equip in Equipment ) {
 				equip.SetTrigger(_curWeaponHash);
@@ -156,7 +161,9 @@ namespace SmtProject.Behaviour.Platformer {
 			_isHitting = false;
 			_canAttack = true;
 
-			WalkAnimator.ResetTrigger(_curWeaponHash);
+			WeaponViewRoot.SetActive(false);
+
+			Animator.ResetTrigger(_curWeaponHash);
 
 			UpdateAnimParams();
 
@@ -184,10 +191,10 @@ namespace SmtProject.Behaviour.Platformer {
 		}
 
 		void UpdateAnimParams() {
-			WalkAnimator.SetBool(IsAliveHash, true);
-			WalkAnimator.SetBool(IsWalkingHash, _isWalking);
-			WalkAnimator.SetBool(IsHittingHash, _isHitting);
-			WalkAnimator.SetInteger(WalkDirHash, (int) _curWalkDir);
+			Animator.SetBool(IsAliveHash, true);
+			Animator.SetBool(IsWalkingHash, _isWalking);
+			Animator.SetBool(IsHittingHash, _isHitting);
+			Animator.SetInteger(WalkDirHash, (int) _curWalkDir);
 
 			foreach ( var equip in Equipment ) {
 				equip.UpdateAnimParams(true, _isWalking, _isHitting, (int) _curWalkDir);
