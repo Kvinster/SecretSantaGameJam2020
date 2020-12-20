@@ -2,6 +2,8 @@
 
 using System.Collections.Generic;
 
+using Shapes;
+
 namespace SmtProject.Behaviour.Utils {
 	public sealed class GraphicsOrderer : MonoBehaviour {
 		interface IOrderable {
@@ -34,6 +36,14 @@ namespace SmtProject.Behaviour.Utils {
 			}
 		}
 
+		sealed class ShapeRendererOrderable : BaseOrderable<ShapeRenderer> {
+			public ShapeRendererOrderable(ShapeRenderer orderable) : base(orderable) { }
+
+			public override void Reorder(int index) {
+				Orderable.SortingOrder = index;
+			}
+		}
+
 		public float Offset;
 
 		readonly List<IOrderable> _orderables = new List<IOrderable>();
@@ -56,6 +66,11 @@ namespace SmtProject.Behaviour.Utils {
 			var mr = tr.GetComponent<MeshRenderer>();
 			if ( mr ) {
 				_orderables.Add(new MeshRendererOrderable(mr));
+			}
+
+			var shapeRenderer = tr.GetComponent<ShapeRenderer>();
+			if ( shapeRenderer ) {
+				_orderables.Add(new ShapeRendererOrderable(shapeRenderer));
 			}
 
 			for ( var i = 0; i < tr.childCount; ++i ) {
