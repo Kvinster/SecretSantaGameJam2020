@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -43,11 +44,14 @@ namespace SmtProject.Behaviour.Platformer {
 		public Spear Spear;
 		[Space]
 		public List<SimplePlayerAnimationController> Equipment = new List<SimplePlayerAnimationController>();
+		[Space]
+		public RandomSoundPlayer SoundPlayer;
 
 		PlayerController _playerController;
 
 		bool _canAttack = true;
 
+		bool    _isAlive;
 		bool    _isHurt;
 		bool    _isWalking;
 		bool    _isHitting;
@@ -64,8 +68,15 @@ namespace SmtProject.Behaviour.Platformer {
 		int CurXp    => _playerController.CurXp;
 		int CurLevel => _playerController.CurLevel;
 
+		void OnDestroy() {
+			_playerController.CurHp.OnCurValueChanged -= OnCurHpChanged;
+			_playerController.MaxHp.OnCurValueChanged -= OnMaxHpChanged;
+			_playerController.CurXp.OnCurValueChanged -= OnCurXpChanged;
+		}
+
 		void Start() {
 			_playerController = PlayerController.Instance;
+			_playerController.Reset();
 
 			HealthBar.Init(CurHp, 0, _playerController.MaxHp);
 			XpBar.Init(CurXp, 0, _playerController.NextLevelXp);
@@ -86,10 +97,49 @@ namespace SmtProject.Behaviour.Platformer {
 			Spear.OnEnemyKilled += OnEnemyKilled;
 
 			WeaponViewRoot.SetActive(false);
+
+			_isAlive = true;
+			UpdateAnimParams();
+		}
+
+		void Update() {
+			if ( _isHurt ) {
+				return;
+			}
+			if ( _canAttack && Input.GetKeyDown(KeyCode.Space) ) {
+				Hit();
+			} else if ( !_isHitting ) {
+				var input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+				if ( input != Vector2.zero ) {
+
+					input *= (Time.deltaTime * WalkSpeed);
+					transform.Translate(input);
+
+					UpdateWalkParams(input);
+				} else {
+					UpdateWalkParams(Vector2.zero);
+				}
+			}
+			UpdateAnimParams();
+		}
+
+		public void TakeDamage(int damage, GameObject attacker, float knockbackMult = 1f) {
+			var curPos = transform.position;
+			Rigidbody.AddForce((curPos - attacker.transform.position).normalized * KnockbackForce * knockbackMult,
+				ForceMode2D.Impulse);
+			_knockbackAnim            =  DOTween.Sequence().AppendInterval(KnockbackDuration);
+			_knockbackAnim.onComplete += () => { _isHurt = false; };
+
+			_playerController.TakeDamage(damage);
+
+			SoundPlayer.Play();
 		}
 
 		void OnCurHpChanged(int curHp) {
 			_hpAnim.SetNextValue(curHp);
+			if ( curHp == 0 ) {
+				Die();
+			}
 		}
 
 		void OnCurHpAnimValueChanged(float curValue) {
@@ -122,28 +172,25 @@ namespace SmtProject.Behaviour.Platformer {
 			_playerController.AddXp(1);
 		}
 
-		void Update() {
-			if ( _isHurt ) {
-				return;
-			}
-			if ( _canAttack && Input.GetKeyDown(KeyCode.Space) ) {
-				Hit();
-			} else if ( !_isHitting ) {
-				var input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-				if ( input != Vector2.zero ) {
-
-					input *= (Time.deltaTime * WalkSpeed);
-					transform.Translate(input);
-
-					UpdateWalkParams(input);
-				} else {
-					UpdateWalkParams(Vector2.zero);
-				}
-			}
+		void Die() {
+			_isAlive = false;
 			UpdateAnimParams();
+
+			SoundPlayer.Play();
+		}
+
+		void EndDie() {
+			ScreenTransitionController.Instance.Transition("Platformer", transform.position, () => {
+				var player = FindObjectOfType<Player>();
+				return player ? player.transform.position : Vector3.zero;
+			});
 		}
 
 		void Hit() {
+			if ( _isHitting ) {
+				return;
+			}
+
 			_isHitting = true;
 			_canAttack = false;
 
@@ -154,6 +201,8 @@ namespace SmtProject.Behaviour.Platformer {
 			foreach ( var equip in Equipment ) {
 				equip.SetTrigger(_curWeaponHash);
 			}
+
+			SoundPlayer.Play();
 		}
 
 		[UsedImplicitly]
@@ -191,18 +240,19 @@ namespace SmtProject.Behaviour.Platformer {
 		}
 
 		void UpdateAnimParams() {
-			Animator.SetBool(IsAliveHash, true);
+			Animator.SetBool(IsAliveHash, _isAlive);
 			Animator.SetBool(IsWalkingHash, _isWalking);
 			Animator.SetBool(IsHittingHash, _isHitting);
 			Animator.SetInteger(WalkDirHash, (int) _curWalkDir);
 
 			foreach ( var equip in Equipment ) {
-				equip.UpdateAnimParams(true, _isWalking, _isHitting, (int) _curWalkDir);
+				equip.UpdateAnimParams(_isAlive, _isWalking, _isHitting, (int) _curWalkDir);
 			}
 		}
 
 		void OnCollisionEnter2D(Collision2D other) {
-			if ( !other.gameObject.GetComponent<Enemy>() ) {
+			var enemy = other.gameObject.GetComponent<Enemy>();
+			if ( !enemy ) {
 				return;
 			}
 			if ( _isHurt ) {
@@ -210,12 +260,7 @@ namespace SmtProject.Behaviour.Platformer {
 			}
 			_isHurt = true;
 
-			var curPos = transform.position;
-			Rigidbody.AddForce((curPos - other.transform.position).normalized * KnockbackForce, ForceMode2D.Impulse);
-			_knockbackAnim = DOTween.Sequence().AppendInterval(KnockbackDuration);
-			_knockbackAnim.onComplete += () => { _isHurt = false; };
-
-			_playerController.TakeDamage(10);
+			TakeDamage(enemy.Damage, other.gameObject);
 		}
 
 		[ContextMenu("Find Equipment")]

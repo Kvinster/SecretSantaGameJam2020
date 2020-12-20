@@ -41,8 +41,7 @@ namespace SmtProject.Behaviour.Platformer {
 
 		GameObject _firePrefab;
 
-		readonly HashSet<Enemy>                _detectedEnemies = new HashSet<Enemy>();
-		readonly Dictionary<Collider2D, Enemy> _colliderToEnemy = new Dictionary<Collider2D, Enemy>();
+		readonly HashSet<GameObject> _detectedEnemies = new HashSet<GameObject>();
 
 		GameObject FirePrefab {
 			get {
@@ -209,17 +208,17 @@ namespace SmtProject.Behaviour.Platformer {
 
 		void OnDetectObjectEnter(Collider2D objectCollider) {
 			var enemy = objectCollider.GetComponent<Enemy>();
+			var demon = objectCollider.GetComponent<Demon>();
 			if ( enemy ) {
-				_detectedEnemies.Add(enemy);
-				_colliderToEnemy.Add(objectCollider, enemy);
+				_detectedEnemies.Add(enemy.gameObject);
+			}
+			if ( demon ) {
+				_detectedEnemies.Add(demon.gameObject);
 			}
 		}
 
 		void OnDetectObjectExit(Collider2D objectCollider) {
-			if ( _colliderToEnemy.TryGetValue(objectCollider, out var enemy) ) {
-				_detectedEnemies.Remove(enemy);
-				_colliderToEnemy.Remove(objectCollider);
-			}
+			_detectedEnemies.RemoveWhere(x => x.gameObject == objectCollider.gameObject);
 		}
 
 		void OnAttackObjectEnter(Collider2D objectCollider) {
@@ -227,7 +226,8 @@ namespace SmtProject.Behaviour.Platformer {
 				return;
 			}
 			var enemy = objectCollider.GetComponent<Enemy>();
-			if ( enemy ) {
+			var demon = objectCollider.GetComponent<Demon>();
+			if ( enemy || demon ) {
 				StartAttack();
 			}
 		}

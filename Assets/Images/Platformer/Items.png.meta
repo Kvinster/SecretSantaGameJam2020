@@ -31,7 +31,7 @@ TextureImporter:
     second: Items_8
   - first:
       213: -2064859774160998932
-    second: Items_9
+    second: Fire
   - first:
       213: -3694533877916086887
     second: Items_10
@@ -322,7 +322,7 @@ TextureImporter:
     second: Items_105
   - first:
       213: 877869178030069554
-    second: Items_106
+    second: heal
   - first:
       213: -3055824601171588779
     second: Items_107
@@ -1191,7 +1191,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Items_9
+      name: Fire
       rect:
         serializedVersion: 2
         x: 288
@@ -3228,7 +3228,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Items_106
+      name: heal
       rect:
         serializedVersion: 2
         x: 128
@@ -5293,8 +5293,8 @@ TextureImporter:
         y: 355
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

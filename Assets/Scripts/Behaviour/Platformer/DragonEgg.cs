@@ -1,29 +1,43 @@
-﻿using System.Collections.Generic;
+﻿using UnityEngine;
 
-using UnityEngine;
+using System.Collections.Generic;
 
+using SmtProject.Behaviour.Platformer.StatBar;
 using SmtProject.Behaviour.Utils;
+using SmtProject.Utils.ValueAnim;
 
 using DG.Tweening;
 
 namespace SmtProject.Behaviour.Platformer {
 	public sealed class DragonEgg : MonoBehaviour {
-		public DragonSpawner      DragonSpawner;
-		public Exploder           EggExploder;
-		public Collider2DNotifier RangeNotifier;
-		public GameObject         HintRoot;
-		public float              DisappearDuration;
-		public List<GameObject>   Fragments;
+		public DragonSpawner    DragonSpawner;
+		public Exploder         EggExploder;
+		public float            DisappearDuration;
+		public List<GameObject> Fragments;
+		[Space]
+		public int                StartHp;
+		public FloatStatBar       HealthBar;
+		public Collider2DNotifier CollisionNotifier;
 
-		bool _detected;
 		bool _used;
 
 		Sequence _disappearAnim;
 
+		int            _curHp;
+		FloatValueAnim _hpAnim;
+
+		void OnDestroy() {
+			if ( CollisionNotifier ) {
+				CollisionNotifier.OnCollisionEnter -= OnDetectCollisionStart;
+			}
+		}
+
 		void Start() {
-			RangeNotifier.OnTriggerEnter += OnRangeEnter;
-			RangeNotifier.OnTriggerExit  += OnRangeExit;
-			HintRoot.SetActive(false);
+			_curHp                    =  StartHp;
+			_hpAnim                   =  new FloatValueAnim(_curHp);
+			_hpAnim.OnCurValueChanged += OnCurHpAnimValueChanged;
+			HealthBar.Init(_curHp, 0, _curHp);
+			CollisionNotifier.OnCollisionEnter += OnDetectCollisionStart;
 		}
 
 		void Update() {
@@ -37,15 +51,27 @@ namespace SmtProject.Behaviour.Platformer {
 					}
 					_disappearAnim.onComplete += () => Destroy(gameObject);
 				}
-				return;
 			}
-			if ( !_detected ) {
-				return;
-			}
-			if ( Input.GetKeyDown(KeyCode.E) ) {
-				Spawn();
-				_used = true;
-				HintRoot.SetActive(false);
+		}
+
+		public void Hatch() {
+			Spawn();
+			_used                              =  true;
+			CollisionNotifier.OnCollisionEnter -= OnDetectCollisionStart;
+		}
+
+		void OnCurHpAnimValueChanged(float curValue) {
+			HealthBar.UpdateView(curValue);
+		}
+
+		void OnCurHpChanged() {
+			if ( _curHp == 0 ) {
+				ScreenTransitionController.Instance.Transition("Platformer", transform.position, () => {
+					var player = FindObjectOfType<Player>();
+					return player ? player.transform.position : Vector3.zero;
+				});
+			} else {
+				_hpAnim.SetNextValue(_curHp);
 			}
 		}
 
@@ -54,25 +80,14 @@ namespace SmtProject.Behaviour.Platformer {
 			DragonSpawner.Spawn();
 		}
 
-		void OnRangeEnter(Collider2D other) {
-			if ( _used ) {
-				return;
-			}
-			if ( other.GetComponent<Player>() ) {
-				_detected = true;
-				if ( !_used ) {
-					HintRoot.SetActive(true);
+		void OnDetectCollisionStart(Collision2D other) {
+			var enemy = other.gameObject.GetComponent<Enemy>();
+			if ( enemy ) {
+				if ( !enemy.TakeDamage(10) ) {
+					enemy.Knockback((enemy.transform.position - transform.position).normalized, 10f);
 				}
-			}
-		}
-
-		void OnRangeExit(Collider2D other) {
-			if ( _used ) {
-				return;
-			}
-			if ( other.GetComponent<Player>() ) {
-				_detected = false;
-				HintRoot.SetActive(false);
+				_curHp = Mathf.Max(0, _curHp - 10);
+				OnCurHpChanged();
 			}
 		}
 	}

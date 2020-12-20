@@ -20,8 +20,20 @@ namespace SmtProject.Core.Platformer {
 
 		public readonly ReactValue<int> CurLevel = new ReactValue<int>(StartLevel);
 
+		public void Reset() {
+			CurHp.SetValue(StartHp);
+			CurXp.SetValue(StartXp);
+			MaxHp.SetValue(StartHp);
+			NextLevelXp.SetValue(LevelXps[0]);
+			CurLevel.SetValue(StartLevel);
+		}
+
 		public void TakeDamage(int damage) {
 			CurHp.SetValue(Mathf.Max(CurHp - damage, 0));
+		}
+
+		public void RestoreHp() {
+			CurHp.SetValue(StartHp);
 		}
 
 		public void AddXp(int xp) {

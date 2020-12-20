@@ -23,6 +23,7 @@ namespace SmtProject.Behaviour.Platformer {
 		static readonly int IsDying     = Animator.StringToHash("IsDying");
 		static readonly int WalkDirHash = Animator.StringToHash("WalkDir");
 
+		public int         Damage = 10;
 		public int         StartHp = 10;
 		public float       WalkSpeed;
 		public Collider2D  Collider;
@@ -35,10 +36,15 @@ namespace SmtProject.Behaviour.Platformer {
 		[Space]
 		public Collider2DNotifier InnerDetectNotifier;
 		public Collider2DNotifier OuterDetectNotifier;
+		[Space]
+		public RandomSoundPlayer StartHuntSoundPlayer;
+		public RandomSoundPlayer DeathSoundPlayer;
 
 		bool    _isWalking;
 		bool    _isDying;
 		WalkDir _curWalkDir;
+
+		bool _ignoreOut;
 
 		Transform _target;
 
@@ -86,6 +92,8 @@ namespace SmtProject.Behaviour.Platformer {
 
 		public void Init(Transform target) {
 			_target = target;
+			StartHuntSoundPlayer.Play();
+			_ignoreOut = true;
 		}
 
 		public bool TakeDamage(int damage) {
@@ -119,6 +127,7 @@ namespace SmtProject.Behaviour.Platformer {
 			Collider.enabled = false;
 			HealthBarRoot.SetActive(false);
 			UpdateAnimParams();
+			DeathSoundPlayer.Play();
 		}
 
 		[UsedImplicitly]
@@ -151,14 +160,15 @@ namespace SmtProject.Behaviour.Platformer {
 		}
 
 		void OnInnerDetectObjectEnter(Collider2D other) {
-			if ( other.GetComponent<Player>() ) {
+			if ( !_target && other.GetComponent<Player>() ) {
 				_target = other.transform;
+				StartHuntSoundPlayer.Play();
 			}
 		}
 
 		void OnOuterDetectObjectExit(Collider2D other) {
-			if ( other.transform == _target ) {
-				_target = null;
+			if ( !_ignoreOut && (other.transform == _target) ) {
+				// _target = null;
 			}
 		}
 	}

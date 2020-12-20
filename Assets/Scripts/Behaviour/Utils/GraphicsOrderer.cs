@@ -7,11 +7,14 @@ using Shapes;
 namespace SmtProject.Behaviour.Utils {
 	public sealed class GraphicsOrderer : MonoBehaviour {
 		interface IOrderable {
+			bool IsValid { get; }
 			void Reorder(int index);
 		}
 
-		abstract class BaseOrderable<T> : IOrderable {
+		abstract class BaseOrderable<T> : IOrderable where T : Object {
 			protected readonly T Orderable;
+
+			public bool IsValid => Orderable;
 
 			protected BaseOrderable(T orderable) {
 				Orderable = orderable;
@@ -80,8 +83,16 @@ namespace SmtProject.Behaviour.Utils {
 
 		void Update() {
 			var startIndex = Mathf.CeilToInt(-(transform.position.y + Offset) * 1000f);
+			var needUpdate = false;
 			foreach ( var orderable in _orderables ) {
+				if ( !orderable.IsValid ) {
+					needUpdate = true;
+					continue;
+				}
 				orderable.Reorder(startIndex++);
+			}
+			if ( needUpdate ) {
+				_orderables.RemoveAll(x => !x.IsValid);
 			}
 		}
 	}
