@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+using System.Collections.Generic;
+
 using SmtProject.Behaviour.Platformer.StatBar;
 using SmtProject.Behaviour.Utils;
 
@@ -8,6 +10,8 @@ using JetBrains.Annotations;
 
 namespace SmtProject.Behaviour.Platformer {
 	public sealed class Enemy : MonoBehaviour {
+		public static readonly HashSet<Enemy> Instances = new HashSet<Enemy>();
+
 		enum WalkDir {
 			Up    = 0,
 			Down  = 1,
@@ -58,6 +62,12 @@ namespace SmtProject.Behaviour.Platformer {
 			CurHp  = StartHp;
 
 			HealthBar.Init(CurHp, 0, _maxHp);
+
+			Instances.Add(this);
+		}
+
+		void OnDestroy() {
+			Instances.Remove(this);
 		}
 
 		void Update() {
@@ -72,6 +82,10 @@ namespace SmtProject.Behaviour.Platformer {
 				_isWalking = false;
 			}
 			UpdateAnimParams();
+		}
+
+		public void Init(Transform target) {
+			_target = target;
 		}
 
 		public bool TakeDamage(int damage) {

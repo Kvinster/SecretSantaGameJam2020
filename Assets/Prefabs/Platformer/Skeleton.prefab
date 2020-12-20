@@ -105,8 +105,8 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -245240653
-  m_SortingLayer: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: -1
 --- !u!1 &1797726412315986552
 GameObject:
@@ -212,8 +212,8 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -245240653
-  m_SortingLayer: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!114 &519303392748799157
 MonoBehaviour:
@@ -304,8 +304,8 @@ GameObject:
   - component: {fileID: 2735485082241111521}
   - component: {fileID: 2735485082241111534}
   - component: {fileID: 2735485082241111535}
-  - component: {fileID: 1375693678127413190}
   - component: {fileID: 6170961548712511875}
+  - component: {fileID: 1883940321057890446}
   m_Layer: 0
   m_Name: Skeleton
   m_TagString: Untagged
@@ -437,19 +437,6 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: -0.07}
   m_Size: {x: 0.25, y: 0.45}
   m_Direction: 0
---- !u!114 &1375693678127413190
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2735485082241111532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb2ba33cc3b4f6b9bbb295a08654d71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Offset: -0.1
 --- !u!50 &6170961548712511875
 Rigidbody2D:
   serializedVersion: 4
@@ -471,6 +458,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &1883940321057890446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2735485082241111532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0513ce257a154913838bf5f834fbd8aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Offset: -0.1
 --- !u!1 &5927067966405809970
 GameObject:
   m_ObjectHideFlags: 0
@@ -574,8 +574,8 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -245240653
-  m_SortingLayer: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 1
 --- !u!1 &6494975753750797372
 GameObject:
